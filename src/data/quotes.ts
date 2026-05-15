@@ -1,0 +1,30 @@
+export const BODYBUILDING_QUOTES = [
+  "The iron never lies to you. — Henry Rollins",
+  "Pain is temporary. Quitting lasts forever. — Lance Armstrong",
+  "The last three or four reps is what makes the muscle grow. — Arnold Schwarzenegger",
+  "To be a champion, you must act like one. — Lou Ferrigno",
+  "Your body can stand almost anything. It's your mind you have to convince.",
+  "Success is usually the culmination of controlling failure. — Sylvester Stallone",
+  "The only bad workout is the one that didn't happen.",
+  "Train insane or remain the same.",
+  "Suffer the pain of discipline or suffer the pain of regret.",
+  "Everybody wants to be a bodybuilder but don't nobody wanna lift no heavy-ass weights. — Ronnie Coleman",
+  "The road to nowhere is paved with excuses.",
+  "You don't find willpower. You create it.",
+  "Strength does not come from the physical capacity. It comes from an indomitable will. — Mahatma Gandhi",
+  "The gym is a shrine to the potential of the human body.",
+  "Obsessed is a word the lazy use to describe the dedicated.",
+  "You have to push past your perceived limits, push past that point you thought was as far as you can go. — Drew Brees",
+  "I will not be outworked. Period.",
+  "Iron is the best antidepressant I have ever found.",
+  "Champions aren't made in gyms. They are made from something deep inside them. — Muhammad Ali",
+  "What doesn't kill me makes me stronger. — Nietzsche",
+  "Progressive overload is not optional. It's the law.",
+  "Consistency beats intensity. Show up every day.",
+  "The mind is the limit. As long as the mind can envision the fact that you can do something, you can do it. — Arnold",
+  "One more rep. Always one more rep.",
+  "Eat. Sleep. Train. Repeat.",
+]
+
+export const getRandomQuote = (): string =>
+  BODYBUILDING_QUOTES[Math.floor(Math.random() * BODYBUILDING_QUOTES.length)]
