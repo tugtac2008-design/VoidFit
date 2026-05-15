@@ -113,7 +113,7 @@ export default function Dashboard() {
               <div>
                 <div className="text-xs text-void-600 uppercase tracking-widest">Today's Calories</div>
                 <div className="mono text-2xl font-bold text-white mt-0.5">
-                  <AnimatedNumber value={Math.round(totals.calories)} className="text-neon-cyan" style={{ textShadow: '0 0 12px rgba(0,212,255,0.5)' } as React.CSSProperties} />
+                  <AnimatedNumber value={Math.round(totals.calories)} className="text-neon-cyan" />
                   <span className="text-void-600 text-base font-normal"> / {goals.calories}</span>
                 </div>
               </div>

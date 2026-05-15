@@ -494,7 +494,7 @@ export default function Nutrition() {
                 <label className="block text-xs mb-1" style={{ color }}>{label} ({unit})</label>
                 <input
                   type="number" min="0" step="0.1" className="input-void"
-                  value={(cf as Record<string, number>)[key]}
+                  value={(cf as unknown as Record<string, number>)[key]}
                   onChange={e => setCf(c => ({ ...c, [key]: parseFloat(e.target.value) || 0 }))}
                 />
               </div>

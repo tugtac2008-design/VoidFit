@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, Target, Calculator, Dumbbell, ChevronRight, Save, RefreshCw, Info, Plus, Trash2 } from 'lucide-react'
+import { User, Target, Calculator, Trophy, Save, RefreshCw, Plus, Trash2 } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import Modal from '../components/Modal'
 import { ActivityLevel, FitnessGoal, ExperienceLevel, UserProfile } from '../types'
@@ -131,10 +131,10 @@ export default function Profile() {
                   <div className="text-xs text-void-600 mb-1">{label}</div>
                   {editing ? (
                     <input type={type} step={step ?? 1} className="input-void"
-                      value={(form as Record<string, unknown>)[key] as string | number}
+                      value={(form as unknown as Record<string, unknown>)[key] as string | number}
                       onChange={e => setForm(f => ({ ...f, [key]: parseFloat(e.target.value) }))} />
                   ) : (
-                    <div className="mono text-base font-bold text-white">{(user as Record<string, unknown>)[key] as string | number} <span className="text-void-600 text-xs font-normal">{unit}</span></div>
+                    <div className="mono text-base font-bold text-white">{(user as unknown as Record<string, unknown>)[key] as string | number} <span className="text-void-600 text-xs font-normal">{unit}</span></div>
                   )}
                 </div>
               ))}
@@ -277,7 +277,7 @@ export default function Profile() {
                     type="number" step={step} min="0"
                     className="input-void flex-1 mono"
                     style={{ padding: '6px 10px' }}
-                    value={(user.macroGoals as Record<string, number>)[key]}
+                    value={(user.macroGoals as unknown as Record<string, number>)[key]}
                     onChange={e => setUser({ macroGoals: { ...user.macroGoals, [key]: parseFloat(e.target.value) || 0 } })}
                   />
                   <span className="text-xs text-void-600 w-8">{unit}</span>

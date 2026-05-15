@@ -2,20 +2,40 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>VoidFit — Elite Fitness Tracking</title>
     <meta name="description" content="Professional bodybuilding & fitness tracking. Nutrition, workouts, body composition — all in one elite platform." />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/VoidFit/manifest.json" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="VoidFit" />
+    <link rel="apple-touch-icon" href="/VoidFit/icon-192.svg" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
     <style>
       html { background: #000000; }
-      body { margin: 0; }
-      #root { background: #000000; }
+      body { margin: 0; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+      #root { background: #000000; min-height: 100vh; min-height: 100dvh; }
     </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/VoidFit/sw.js')
+        })
+      }
+    </script>
   </body>
 </html>
