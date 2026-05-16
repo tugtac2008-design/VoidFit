@@ -39,6 +39,11 @@ export async function saveToFirestore(uid: string): Promise<void> {
       supplementLogs: state.supplementLogs.filter(s => new Date(s.date).getTime() > cutoff),
       workouts: state.workouts.filter(w => new Date(w.date).getTime() > cutoff),
       measurements: state.measurements,
+      goals: state.goals,
+      xp: state.xp,
+      badges: state.badges,
+      programs: state.programs,
+      readinessLogs: state.readinessLogs.filter(r => new Date(r.date).getTime() > cutoff),
       lastUpdated: now,
     }
 

@@ -106,6 +106,7 @@ export interface WorkoutExercise {
   sets: WorkoutSet[]
   notes?: string
   supersetWith?: string // exercise id
+  supersetGroup?: string
 }
 
 export interface Workout {
@@ -233,4 +234,62 @@ export interface SupplementLog {
   supplementId: string
   date: string
   taken: boolean
+}
+
+// ─── Goals ────────────────────────────────────────────────────────────────────
+
+export type GoalType = 'weight_loss' | 'weight_gain' | 'strength' | 'habit' | 'endurance' | 'body_comp'
+export type GoalStatus = 'active' | 'completed' | 'paused'
+
+export interface Goal {
+  id: string
+  title: string
+  description: string
+  type: GoalType
+  targetValue: number
+  currentValue: number
+  unit: string
+  deadline: string // ISO date string
+  createdAt: string
+  status: GoalStatus
+  milestones: { value: number; label: string; reached: boolean }[]
+}
+
+// ─── Gamification ─────────────────────────────────────────────────────────────
+
+export interface Badge {
+  id: string
+  name: string
+  description: string
+  icon: string // emoji
+  earnedAt: string
+  category: 'streak' | 'strength' | 'nutrition' | 'consistency' | 'milestone'
+}
+
+// ─── Programs ─────────────────────────────────────────────────────────────────
+
+export interface Program {
+  id: string
+  name: string
+  description: string
+  durationWeeks: number
+  daysPerWeek: number
+  difficulty: 'beginner' | 'intermediate' | 'advanced'
+  category: 'strength' | 'hypertrophy' | 'powerlifting' | 'cardio' | 'general'
+  schedule: Record<string, string> // "week1_day1" -> templateId or exercise description
+  isActive: boolean
+  startedAt?: string
+  completedWeeks: number
+  tags: string[]
+}
+
+// ─── Readiness ────────────────────────────────────────────────────────────────
+
+export interface ReadinessLog {
+  date: string
+  soreness: number // 1-10
+  sleep: number // hours
+  stress: number // 1-10
+  energy: number // 1-10
+  score: number // calculated 0-100
 }

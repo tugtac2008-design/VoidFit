@@ -73,14 +73,37 @@ input[type="number"] { -moz-appearance: textfield; }
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+/* ─── Typography scale ─── */
+.text-display { font-size: 40px; font-weight: 900; line-height: 1.1; letter-spacing: -1px; }
+.text-heading { font-size: 28px; font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; }
+.text-subheading { font-size: 19px; font-weight: 700; line-height: 1.3; }
+.text-body { font-size: 14.5px; line-height: 1.6; }
+.text-caption { font-size: 12px; color: var(--text-3); }
+.text-overline { font-size: 10.5px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--text-3); }
+
 /* ─── Cards ─── */
 .card {
   background: var(--void-2);
   border: 1px solid var(--border);
   border-radius: 14px;
+  padding: 20px;
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 .card:hover { border-color: var(--border-2); background: var(--void-3); }
+
+/* ─── Glass card ─── */
+.glass-card {
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 24px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.glass-card:hover {
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 0 30px rgba(0,212,255,0.06), 0 8px 32px rgba(0,0,0,0.3);
+}
 .card-cyan { border-color: rgba(0, 212, 255, 0.2); background: rgba(0, 212, 255, 0.03); }
 .card-purple { border-color: rgba(168, 85, 247, 0.2); background: rgba(168, 85, 247, 0.03); }
 .card-green { border-color: rgba(0, 255, 135, 0.2); background: rgba(0, 255, 135, 0.03); }
@@ -531,6 +554,49 @@ textarea.input-void { resize: vertical; min-height: 80px; }
 .set-row:last-child { border-bottom: none; }
 .set-row.completed { opacity: 0.6; }
 .set-row.warmup { opacity: 0.5; }
+
+/* ─── Skeleton loader ─── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #111 25%, #1e1e1e 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 8px;
+}
+
+/* ─── Confetti celebration ─── */
+@keyframes confettiFall {
+  0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  animation: confettiFall 3s ease-in forwards;
+}
+
+/* ─── FAB ─── */
+.fab {
+  position: fixed;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d4ff, #0088aa);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0,212,255,0.5), 0 4px 12px rgba(0,0,0,0.5);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  z-index: 60;
+}
+.fab:hover {
+  box-shadow: 0 0 30px rgba(0,212,255,0.7), 0 6px 20px rgba(0,0,0,0.6);
+  transform: scale(1.08);
+}
 
 /* ─── Muscle group colors ─── */
 .muscle-chest { color: #ff3b5c; }

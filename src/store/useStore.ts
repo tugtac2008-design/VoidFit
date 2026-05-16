@@ -3,7 +3,8 @@ import { persist } from 'zustand/middleware'
 import {
   UserProfile, MealEntry, FoodItem, WaterLog, Workout, WorkoutTemplate,
   WorkoutExercise, WorkoutSet, Exercise, BodyMeasurement, PersonalRecord,
-  AppSettings, MealType, Supplement, SupplementLog
+  AppSettings, MealType, Supplement, SupplementLog,
+  Goal, Badge, Program, ReadinessLog, GoalStatus
 } from '../types'
 import { genId, TODAY } from '../utils/format'
 import { calc1RM, calcVolume, calcTDEE, calcCalorieTarget, calcMacros } from '../utils/calculations'
@@ -110,6 +111,29 @@ interface StoreState {
   // ─── Seed ──────────────────────────────────────────────────────────────────
   seedDemoData: () => void
 
+  // ─── Goals ─────────────────────────────────────────────────────────────────
+  goals: Goal[]
+  addGoal: (g: Omit<Goal, 'id' | 'createdAt' | 'status'>) => void
+  updateGoal: (id: string, updates: Partial<Goal>) => void
+  deleteGoal: (id: string) => void
+
+  // ─── Gamification ──────────────────────────────────────────────────────────
+  xp: number
+  badges: Badge[]
+  addXP: (amount: number) => void
+  awardBadge: (badge: Omit<Badge, 'id' | 'earnedAt'>) => void
+
+  // ─── Programs ──────────────────────────────────────────────────────────────
+  programs: Program[]
+  addProgram: (p: Omit<Program, 'id' | 'completedWeeks'>) => void
+  updateProgram: (id: string, updates: Partial<Program>) => void
+  deleteProgram: (id: string) => void
+
+  // ─── Readiness ─────────────────────────────────────────────────────────────
+  readinessLogs: ReadinessLog[]
+  logReadiness: (log: Omit<ReadinessLog, 'score'>) => void
+  getTodayReadiness: () => ReadinessLog | null
+
   // ─── Cloud Sync ────────────────────────────────────────────────────────────
   hydrateStore: (data: Record<string, unknown>) => void
 }
@@ -120,6 +144,11 @@ export const useStore = create<StoreState>()(
       // ─── User ──────────────────────────────────────────────────────────────
       user: DEFAULT_PROFILE,
       isOnboarded: false,
+      goals: [],
+      xp: 0,
+      badges: [],
+      programs: [],
+      readinessLogs: [],
 
       setUser: (updates) => set(s => ({ user: { ...s.user, ...updates } })),
 
@@ -506,6 +535,33 @@ export const useStore = create<StoreState>()(
       updateSettings: (updates) =>
         set(s => ({ settings: { ...s.settings, ...updates } })),
 
+      // ─── Goals ─────────────────────────────────────────────────────────────
+      addGoal: (g) => set(s => ({ goals: [...s.goals, { ...g, id: genId(), createdAt: TODAY(), status: 'active' as GoalStatus }] })),
+      updateGoal: (id, updates) => set(s => ({ goals: s.goals.map(g => g.id === id ? { ...g, ...updates } : g) })),
+      deleteGoal: (id) => set(s => ({ goals: s.goals.filter(g => g.id !== id) })),
+
+      // ─── Gamification ──────────────────────────────────────────────────────
+      addXP: (amount) => set(s => ({ xp: s.xp + amount })),
+      awardBadge: (badge) => set(s => {
+        if (s.badges.some(b => b.name === badge.name)) return s
+        return { badges: [...s.badges, { ...badge, id: genId(), earnedAt: new Date().toISOString() }] }
+      }),
+
+      // ─── Programs ──────────────────────────────────────────────────────────
+      addProgram: (p) => set(s => ({ programs: [...s.programs, { ...p, id: genId(), completedWeeks: 0 }] })),
+      updateProgram: (id, updates) => set(s => ({ programs: s.programs.map(p => p.id === id ? { ...p, ...updates } : p) })),
+      deleteProgram: (id) => set(s => ({ programs: s.programs.filter(p => p.id !== id) })),
+
+      // ─── Readiness ─────────────────────────────────────────────────────────
+      logReadiness: (log) => {
+        const score = Math.round(((11 - log.soreness) / 10 * 25) + (Math.min(log.sleep, 9) / 9 * 25) + ((11 - log.stress) / 10 * 25) + (log.energy / 10 * 25))
+        set(s => ({ readinessLogs: [...s.readinessLogs.filter(r => r.date !== log.date), { ...log, score }] }))
+      },
+      getTodayReadiness: () => {
+        const today = TODAY()
+        return get().readinessLogs.find(r => r.date === today) ?? null
+      },
+
       // ─── Seed ──────────────────────────────────────────────────────────────
       hydrateStore: (data) => {
         set(s => ({
@@ -521,6 +577,11 @@ export const useStore = create<StoreState>()(
           supplementLogs: (data.supplementLogs as typeof s.supplementLogs) ?? s.supplementLogs,
           workouts: (data.workouts as typeof s.workouts) ?? s.workouts,
           measurements: (data.measurements as typeof s.measurements) ?? s.measurements,
+          goals: (data.goals as typeof s.goals) ?? s.goals,
+          xp: (data.xp as number) ?? s.xp,
+          badges: (data.badges as typeof s.badges) ?? s.badges,
+          programs: (data.programs as typeof s.programs) ?? s.programs,
+          readinessLogs: (data.readinessLogs as typeof s.readinessLogs) ?? s.readinessLogs,
         }))
       },
 
