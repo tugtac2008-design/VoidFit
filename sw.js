@@ -1,11 +1,5 @@
-const CACHE = 'voidfit-v4'
-const SHELL = [
-  '/VoidFit/',
-  '/VoidFit/index.html',
-  '/VoidFit/manifest.json',
-  '/VoidFit/icon-192.png',
-  '/VoidFit/icon-512.png',
-]
+const CACHE = 'voidfit-v5'
+const SHELL = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png']
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -33,8 +27,8 @@ self.addEventListener('fetch', e => {
     caches.open(CACHE).then(async cache => {
       const cached = await cache.match(e.request)
 
-      // Hashed asset bundles: cache-first (filenames never reuse same hash)
-      if (url.pathname.includes('/VoidFit/assets/')) {
+      // Hashed asset bundles: cache-first
+      if (url.pathname.startsWith('/assets/')) {
         if (cached) return cached
         const res = await fetch(e.request)
         if (res.ok) cache.put(e.request, res.clone())
@@ -46,16 +40,14 @@ self.addEventListener('fetch', e => {
         .then(res => { if (res.ok) cache.put(e.request, res.clone()); return res })
         .catch(() => null)
 
-      // Return cached immediately, update in background
       if (cached) {
         networkPromise.catch(() => {})
         return cached
       }
 
-      // No cache: wait for network, fallback to index.html for navigation
       const res = await networkPromise
       if (res) return res
-      const fallback = await caches.match('/VoidFit/index.html')
+      const fallback = await caches.match('/index.html')
       return fallback || new Response('Offline', { status: 503 })
     })
   )
