@@ -11,9 +11,12 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null)
 
+// If they were logged in before, don't block rendering on Firebase re-check
+const hadSession = !!localStorage.getItem('voidfit-store')
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!hadSession)
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, u => {
