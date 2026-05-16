@@ -52,6 +52,18 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth native scrolling on iOS */
+html {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
+/* Prevent pull-to-refresh interfering with app */
+body {
+  overscroll-behavior-y: contain;
 }
 
 html, body {

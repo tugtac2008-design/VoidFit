@@ -588,28 +588,132 @@ export const useStore = create<StoreState>()(
 
       seedDemoData: () => {
         const today = TODAY()
-        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
-        const twoDaysAgo = new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0]
+        const d = (n: number) => new Date(Date.now() - n * 86400000).toISOString().split('T')[0]
 
-        // Seed measurements
         const demoMeasurements: BodyMeasurement[] = [
           { id: 'm1', date: today, weight: 85.2, bodyFat: 14.5, chest: 105, waist: 83, hips: 99, leftArm: 39, rightArm: 39.5, leftThigh: 62, rightThigh: 62 },
-          { id: 'm2', date: yesterday, weight: 85.0, bodyFat: 14.6, chest: 105, waist: 83 },
-          { id: 'm3', date: twoDaysAgo, weight: 85.4, bodyFat: 14.8 },
-          { id: 'm4', date: '2026-05-01', weight: 84.5 },
-          { id: 'm5', date: '2026-04-25', weight: 84.1 },
-          { id: 'm6', date: '2026-04-18', weight: 83.8 },
-          { id: 'm7', date: '2026-04-10', weight: 83.3 },
+          { id: 'm2', date: d(1), weight: 85.0, bodyFat: 14.6, chest: 105, waist: 83 },
+          { id: 'm3', date: d(2), weight: 85.4, bodyFat: 14.8 },
+          { id: 'm4', date: d(7), weight: 84.8 },
+          { id: 'm5', date: d(14), weight: 84.2 },
+          { id: 'm6', date: d(21), weight: 83.9 },
+          { id: 'm7', date: d(30), weight: 83.3 },
         ]
 
+        const demoWorkouts: Workout[] = [
+          {
+            id: 'dw1', name: 'Push Day — Chest & Shoulders', date: today,
+            startTime: today + 'T07:00:00', duration: 68, totalVolume: 8420, totalSets: 10, notes: '',
+            exercises: [
+              { id: 'de1', exerciseId: 'bench', exercise: { id: 'bench', name: 'Bench Press', muscleGroup: 'Chest', secondaryMuscles: ['Triceps', 'Shoulders'], equipment: 'Barbell', type: 'compound' },
+                sets: [
+                  { id: 's1', weight: 100, reps: 5, completed: true, isWarmup: false },
+                  { id: 's2', weight: 100, reps: 5, completed: true, isWarmup: false },
+                  { id: 's3', weight: 95, reps: 6, completed: true, isWarmup: false },
+                  { id: 's4', weight: 90, reps: 8, completed: true, isWarmup: false },
+                ], notes: '' },
+              { id: 'de2', exerciseId: 'ohp', exercise: { id: 'ohp', name: 'Overhead Press', muscleGroup: 'Shoulders', secondaryMuscles: ['Triceps'], equipment: 'Barbell', type: 'compound' },
+                sets: [
+                  { id: 's5', weight: 70, reps: 6, completed: true, isWarmup: false },
+                  { id: 's6', weight: 70, reps: 5, completed: true, isWarmup: false },
+                  { id: 's7', weight: 65, reps: 7, completed: true, isWarmup: false },
+                ], notes: '' },
+              { id: 'de3', exerciseId: 'tri', exercise: { id: 'tri', name: 'Tricep Pushdown', muscleGroup: 'Triceps', secondaryMuscles: [], equipment: 'Cable', type: 'isolation' },
+                sets: [
+                  { id: 's8', weight: 45, reps: 12, completed: true, isWarmup: false },
+                  { id: 's9', weight: 45, reps: 10, completed: true, isWarmup: false },
+                  { id: 's10', weight: 40, reps: 12, completed: true, isWarmup: false },
+                ], notes: '' },
+            ],
+          },
+          {
+            id: 'dw2', name: 'Pull Day — Back & Biceps', date: d(2),
+            startTime: d(2) + 'T07:00:00', duration: 74, totalVolume: 9600, totalSets: 9, notes: '',
+            exercises: [
+              { id: 'de4', exerciseId: 'dl', exercise: { id: 'dl', name: 'Deadlift', muscleGroup: 'Back', secondaryMuscles: ['Legs', 'Glutes'], equipment: 'Barbell', type: 'compound' },
+                sets: [
+                  { id: 's11', weight: 160, reps: 4, completed: true, isWarmup: false },
+                  { id: 's12', weight: 160, reps: 4, completed: true, isWarmup: false },
+                  { id: 's13', weight: 150, reps: 5, completed: true, isWarmup: false },
+                ], notes: '' },
+              { id: 'de5', exerciseId: 'pu', exercise: { id: 'pu', name: 'Pull-ups', muscleGroup: 'Back', secondaryMuscles: ['Biceps'], equipment: 'Bodyweight', type: 'compound' },
+                sets: [
+                  { id: 's14', weight: 0, reps: 10, completed: true, isWarmup: false },
+                  { id: 's15', weight: 0, reps: 9, completed: true, isWarmup: false },
+                  { id: 's16', weight: 0, reps: 8, completed: true, isWarmup: false },
+                ], notes: '' },
+              { id: 'de6', exerciseId: 'bc', exercise: { id: 'bc', name: 'Barbell Curl', muscleGroup: 'Biceps', secondaryMuscles: [], equipment: 'Barbell', type: 'isolation' },
+                sets: [
+                  { id: 's17', weight: 50, reps: 10, completed: true, isWarmup: false },
+                  { id: 's18', weight: 50, reps: 9, completed: true, isWarmup: false },
+                  { id: 's19', weight: 45, reps: 11, completed: true, isWarmup: false },
+                ], notes: '' },
+            ],
+          },
+          {
+            id: 'dw3', name: 'Leg Day — Quads & Hamstrings', date: d(4),
+            startTime: d(4) + 'T07:00:00', duration: 82, totalVolume: 14200, totalSets: 7, notes: '',
+            exercises: [
+              { id: 'de7', exerciseId: 'sq', exercise: { id: 'sq', name: 'Back Squat', muscleGroup: 'Legs', secondaryMuscles: ['Glutes', 'Core'], equipment: 'Barbell', type: 'compound' },
+                sets: [
+                  { id: 's20', weight: 130, reps: 5, completed: true, isWarmup: false },
+                  { id: 's21', weight: 130, reps: 5, completed: true, isWarmup: false },
+                  { id: 's22', weight: 125, reps: 6, completed: true, isWarmup: false },
+                  { id: 's23', weight: 120, reps: 7, completed: true, isWarmup: false },
+                ], notes: '' },
+              { id: 'de8', exerciseId: 'rld', exercise: { id: 'rld', name: 'Romanian Deadlift', muscleGroup: 'Legs', secondaryMuscles: ['Glutes', 'Back'], equipment: 'Barbell', type: 'compound' },
+                sets: [
+                  { id: 's24', weight: 100, reps: 8, completed: true, isWarmup: false },
+                  { id: 's25', weight: 100, reps: 8, completed: true, isWarmup: false },
+                  { id: 's26', weight: 95, reps: 9, completed: true, isWarmup: false },
+                ], notes: '' },
+            ],
+          },
+        ]
+
+        const demoMeals: MealEntry[] = [
+          { id: 'dm1', foodId: 'f1', date: today, mealType: 'breakfast', servings: 1, time: '08:00',
+            food: { id: 'f1', name: 'Oats + Whey + Banana', category: 'Grains & Carbs', servingSize: 1, servingUnit: 'serving', calories: 620, protein: 48, carbs: 78, fat: 12, fiber: 8, isCustom: true } },
+          { id: 'dm2', foodId: 'f2', date: today, mealType: 'lunch', servings: 1, time: '13:00',
+            food: { id: 'f2', name: 'Chicken Rice Bowl', category: 'Protein', servingSize: 1, servingUnit: 'serving', calories: 740, protein: 58, carbs: 82, fat: 14, fiber: 4, isCustom: true } },
+          { id: 'dm3', foodId: 'f3', date: today, mealType: 'pre-workout', servings: 1, time: '16:30',
+            food: { id: 'f3', name: 'Greek Yogurt + Fruit', category: 'Dairy', servingSize: 1, servingUnit: 'serving', calories: 280, protein: 22, carbs: 34, fat: 5, fiber: 2, isCustom: true } },
+        ]
+
+        const demoGoal: Goal = {
+          id: 'dg1', title: 'Bench Press 120kg', description: 'Hit a 120kg bench press 1RM', type: 'strength',
+          targetValue: 120, currentValue: 100, unit: 'kg',
+          status: 'active', createdAt: d(30),
+          deadline: d(-60),
+          milestones: [
+            { value: 105, label: '105kg', reached: true },
+            { value: 110, label: '110kg', reached: false },
+            { value: 120, label: 'TARGET', reached: false },
+          ],
+        }
+
         set(s => ({
-          measurements: [...demoMeasurements, ...s.measurements.filter(m =>
-            !demoMeasurements.some(d => d.id === m.id)
-          )],
           isOnboarded: true,
+          xp: 1240,
+          measurements: [...demoMeasurements, ...s.measurements.filter(m => !demoMeasurements.some(d => d.id === m.id))],
+          workouts: [...demoWorkouts, ...s.workouts.filter(w => !demoWorkouts.some(d => d.id === w.id))],
+          mealEntries: [...demoMeals, ...s.mealEntries.filter(m => !demoMeals.some(d => d.id === m.id))],
           waterLogs: [
             { date: today, amount: 1800 },
-            { date: yesterday, amount: 2600 },
+            { date: d(1), amount: 2600 },
+            { date: d(2), amount: 2200 },
+          ],
+          readinessLogs: [
+            { date: today, soreness: 4, sleep: 7.5, stress: 4, energy: 7, score: 72 },
+            { date: d(1), soreness: 6, sleep: 6.5, stress: 5, energy: 6, score: 61 },
+            { date: d(2), soreness: 3, sleep: 8, stress: 3, energy: 8, score: 84 },
+          ],
+          goals: [demoGoal, ...s.goals.filter(g => g.id !== demoGoal.id)],
+          personalRecords: [
+            { exerciseId: 'bench', exerciseName: 'Bench Press', weight: 107.5, reps: 1, date: d(7), estimatedOneRM: 107.5 },
+            { exerciseId: 'sq', exerciseName: 'Back Squat', weight: 140, reps: 1, date: d(14), estimatedOneRM: 140 },
+            { exerciseId: 'dl', exerciseName: 'Deadlift', weight: 180, reps: 1, date: d(21), estimatedOneRM: 180 },
+            { exerciseId: 'ohp', exerciseName: 'Overhead Press', weight: 77.5, reps: 1, date: d(10), estimatedOneRM: 77.5 },
           ],
         }))
       },

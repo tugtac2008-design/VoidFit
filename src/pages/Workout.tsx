@@ -249,7 +249,7 @@ export default function Workout() {
                                 placeholder="0"
                                 onChange={e => updateSet(ex.id, set.id, { weight: parseFloat(e.target.value) || 0 })}
                                 className="input-void text-center mono"
-                                style={{ padding: '5px 6px', fontSize: '13px' }}
+                                style={{ padding: '5px 6px', fontSize: '16px' }}
                               />
                               <input
                                 type="number" step="1" min="1"
@@ -257,7 +257,7 @@ export default function Workout() {
                                 placeholder="0"
                                 onChange={e => updateSet(ex.id, set.id, { reps: parseInt(e.target.value) || 0 })}
                                 className="input-void text-center mono"
-                                style={{ padding: '5px 6px', fontSize: '13px' }}
+                                style={{ padding: '5px 6px', fontSize: '16px' }}
                               />
                               <input
                                 type="number" step="0.5" min="6" max="10"
@@ -265,7 +265,7 @@ export default function Workout() {
                                 placeholder="—"
                                 onChange={e => updateSet(ex.id, set.id, { rpe: parseFloat(e.target.value) || undefined })}
                                 className="input-void text-center mono"
-                                style={{ padding: '5px 6px', fontSize: '13px' }}
+                                style={{ padding: '5px 6px', fontSize: '16px' }}
                               />
                               <div className="flex items-center gap-1">
                                 <button
