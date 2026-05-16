@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Target, Plus, Trash2, Edit3, Trophy, ChevronDown, ChevronUp, X, Check } from 'lucide-react'
 import { useStore } from '../store/useStore'
+import { useSounds } from '../hooks/useSounds'
 import { Goal, GoalType, GoalStatus } from '../types'
 import { TODAY, fmt } from '../utils/format'
 
@@ -179,6 +180,7 @@ function parseMilestones(str: string, unit: string) {
 }
 
 export default function Goals() {
+  const snd = useSounds()
   const { goals, addGoal, updateGoal, deleteGoal, xp, badges } = useStore()
   const [showModal, setShowModal] = useState(false)
   const [editGoal, setEditGoal] = useState<Goal | null>(null)
@@ -228,8 +230,10 @@ export default function Goals() {
     }
     if (editGoal) {
       updateGoal(editGoal.id, goalData)
+      snd.success()
     } else {
       addGoal(goalData)
+      snd.success()
     }
     setShowModal(false)
   }
@@ -343,7 +347,7 @@ export default function Goals() {
                 index={i}
                 onEdit={openEdit}
                 onDelete={deleteGoal}
-                onUpdate={updateGoal}
+                onUpdate={(id, updates) => { updateGoal(id, updates); if (updates.status === 'completed') snd.celebrate() }}
               />
             ))}
           </div>

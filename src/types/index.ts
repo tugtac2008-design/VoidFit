@@ -210,6 +210,7 @@ export interface AppSettings {
   restTimerDefault: number  // seconds
   showMicronutrients: boolean
   autoRestTimer: boolean
+  soundEnabled: boolean
 }
 
 // ─── Water ────────────────────────────────────────────────────────────────────

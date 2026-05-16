@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Search, X, ChevronLeft, ChevronRight, Droplets, Flame, Edit2, Trash2, ChevronDown } from 'lucide-react'
 import { useStore } from '../store/useStore'
+import { useSounds } from '../hooks/useSounds'
 import Modal from '../components/Modal'
 import { FoodItem, MealType, MEAL_LABELS } from '../types'
 import { FOOD_DATABASE, searchFoods } from '../data/foods'
@@ -18,6 +19,7 @@ function offsetDate(base: string, days: number): string {
 }
 
 export default function Nutrition() {
+  const snd = useSounds()
   const { user, getMealEntriesForDate, addMealEntry, removeMealEntry, updateMealEntry,
     customFoods, addCustomFood, getWaterForDate, addWater, setWaterForDate, settings } = useStore()
 
@@ -71,6 +73,7 @@ export default function Nutrition() {
   const handleAddFood = () => {
     if (!selectedFood || !addModal) return
     addMealEntry(selectedFood, servings, addModal, date)
+    snd.success()
     setAddModal(null)
     setSelectedFood(null)
     setServings(1)
@@ -231,7 +234,7 @@ export default function Nutrition() {
         </div>
         <div className="flex gap-2 mt-3">
           {[150, 250, 330, 500].map(ml => (
-            <button key={ml} onClick={() => addWater(date, ml)} className="btn btn-secondary btn-sm flex-1">
+            <button key={ml} onClick={() => { addWater(date, ml); snd.tap() }} className="btn btn-secondary btn-sm flex-1">
               +{ml}ml
             </button>
           ))}

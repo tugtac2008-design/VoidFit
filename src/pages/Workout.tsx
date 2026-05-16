@@ -5,6 +5,7 @@ import {
   Trash2, Timer, Check, Trophy, BookOpen, Layers, Edit2, Flame
 } from 'lucide-react'
 import { useStore } from '../store/useStore'
+import { useSounds } from '../hooks/useSounds'
 import Modal from '../components/Modal'
 import RestTimer from '../components/RestTimer'
 import { Exercise, WorkoutTemplate } from '../types'
@@ -13,6 +14,7 @@ import { fmt, TODAY, formatDuration, muscleColor, formatVolume } from '../utils/
 import { calc1RM, calcVolume } from '../utils/calculations'
 
 export default function Workout() {
+  const snd = useSounds()
   const {
     activeWorkout, workouts, templates, settings, personalRecords,
     startWorkout, startFromTemplate, addExerciseToActive, removeExerciseFromActive,
@@ -267,7 +269,7 @@ export default function Workout() {
                               />
                               <div className="flex items-center gap-1">
                                 <button
-                                  onClick={() => toggleSetComplete(ex.id, set.id)}
+                                  onClick={() => { toggleSetComplete(ex.id, set.id); set.completed ? snd.dismiss() : snd.check() }}
                                   className={`w-7 h-7 rounded-6 border flex items-center justify-center transition-all ${
                                     set.completed
                                       ? 'bg-neon-green/15 border-neon-green/40 text-neon-green'
@@ -508,7 +510,7 @@ export default function Workout() {
           </p>
           <div className="flex gap-3">
             <button onClick={() => setConfirmFinish(false)} className="btn btn-ghost flex-1">Cancel</button>
-            <button onClick={() => { finishWorkout(); setConfirmFinish(false); setTab('history') }} className="btn btn-success flex-1">
+            <button onClick={() => { finishWorkout(); snd.achievement(); setConfirmFinish(false); setTab('history') }} className="btn btn-success flex-1">
               <Check size={14} /> Save & Finish
             </button>
           </div>

@@ -39,6 +39,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   restTimerDefault: 90,
   showMicronutrients: false,
   autoRestTimer: true,
+  soundEnabled: true,
 }
 
 interface StoreState {

@@ -226,6 +226,13 @@ export default function Profile() {
                   <div className={`absolute top-0.5 w-4 h-4 rounded-full transition-all ${settings.showMicronutrients ? 'left-5 bg-neon-cyan' : 'left-0.5 bg-void-600'}`} />
                 </button>
               </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-void-600">Sound Effects</span>
+                <button onClick={() => updateSettings({ soundEnabled: !settings.soundEnabled })}
+                  className={`w-10 h-5 rounded-full transition-colors relative ${settings.soundEnabled ? 'bg-neon-cyan/30 border-neon-cyan/50' : 'bg-void-300 border-void-400'} border`}>
+                  <div className={`absolute top-0.5 w-4 h-4 rounded-full transition-all ${settings.soundEnabled ? 'left-5 bg-neon-cyan' : 'left-0.5 bg-void-600'}`} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
