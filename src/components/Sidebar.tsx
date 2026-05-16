@@ -2,9 +2,10 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   LayoutDashboard, Utensils, Dumbbell, TrendingUp, User,
-  Zap, Activity
+  Zap, Activity, LogOut
 } from 'lucide-react'
 import { useStore } from '../store/useStore'
+import { useAuth } from '../contexts/AuthContext'
 import { pct } from '../utils/format'
 import { TODAY } from '../utils/format'
 
@@ -19,6 +20,7 @@ const NAV = [
 export default function Sidebar() {
   const location = useLocation()
   const { user, getMealEntriesForDate, getWaterForDate, activeWorkout } = useStore()
+  const { user: authUser, signOut } = useAuth()
   const today = TODAY()
 
   const entries = getMealEntriesForDate(today)
@@ -117,14 +119,26 @@ export default function Sidebar() {
       <div className="px-3 pb-4">
         <NavLink to="/profile" className="flex items-center gap-3 p-3 rounded-10 hover:bg-void-300 transition-colors cursor-pointer"
           style={{ borderRadius: '10px' }}>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-cyan/20 to-neon-purple/20 border border-void-400 flex items-center justify-center">
-            <span className="text-xs font-bold text-neon-cyan">{user.name.charAt(0).toUpperCase()}</span>
-          </div>
+          {authUser?.photoURL ? (
+            <img src={authUser.photoURL} alt="" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-cyan/20 to-neon-purple/20 border border-void-400 flex items-center justify-center">
+              <span className="text-xs font-bold text-neon-cyan">{user.name.charAt(0).toUpperCase()}</span>
+            </div>
+          )}
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-white truncate">{user.name}</div>
+            <div className="text-xs font-semibold text-white truncate">{authUser?.displayName ?? user.name}</div>
             <div className="text-[10px] text-void-600 capitalize">{user.experience}</div>
           </div>
         </NavLink>
+        <button
+          onClick={signOut}
+          className="flex items-center gap-2 w-full p-3 text-void-600 hover:text-red-400 transition-colors text-xs"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', borderRadius: '10px' }}
+        >
+          <LogOut size={13} />
+          <span>Sign out</span>
+        </button>
       </div>
     </aside>
   )

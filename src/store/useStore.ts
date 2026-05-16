@@ -109,6 +109,9 @@ interface StoreState {
 
   // ─── Seed ──────────────────────────────────────────────────────────────────
   seedDemoData: () => void
+
+  // ─── Cloud Sync ────────────────────────────────────────────────────────────
+  hydrateStore: (data: Record<string, unknown>) => void
 }
 
 export const useStore = create<StoreState>()(
@@ -504,6 +507,23 @@ export const useStore = create<StoreState>()(
         set(s => ({ settings: { ...s.settings, ...updates } })),
 
       // ─── Seed ──────────────────────────────────────────────────────────────
+      hydrateStore: (data) => {
+        set(s => ({
+          user: (data.user as typeof s.user) ?? s.user,
+          isOnboarded: (data.isOnboarded as boolean) ?? s.isOnboarded,
+          settings: (data.settings as typeof s.settings) ?? s.settings,
+          customFoods: (data.customFoods as typeof s.customFoods) ?? s.customFoods,
+          supplements: (data.supplements as typeof s.supplements) ?? s.supplements,
+          personalRecords: (data.personalRecords as typeof s.personalRecords) ?? s.personalRecords,
+          templates: (data.templates as typeof s.templates) ?? s.templates,
+          mealEntries: (data.mealEntries as typeof s.mealEntries) ?? s.mealEntries,
+          waterLogs: (data.waterLogs as typeof s.waterLogs) ?? s.waterLogs,
+          supplementLogs: (data.supplementLogs as typeof s.supplementLogs) ?? s.supplementLogs,
+          workouts: (data.workouts as typeof s.workouts) ?? s.workouts,
+          measurements: (data.measurements as typeof s.measurements) ?? s.measurements,
+        }))
+      },
+
       seedDemoData: () => {
         const today = TODAY()
         const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
