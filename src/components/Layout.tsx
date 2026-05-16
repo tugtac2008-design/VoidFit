@@ -14,8 +14,8 @@ export default function Layout({ children }: Props) {
 
       {/* Main content */}
       <main
-        className="flex-1 px-4 py-4 lg:px-6 lg:py-6"
-        style={{ marginLeft: 0, paddingBottom: 80 }}
+        className="flex-1 px-3 py-4 lg:px-6 lg:py-6"
+        style={{ marginLeft: 0, paddingBottom: 'calc(140px + env(safe-area-inset-bottom))' }}
       >
         {/* On desktop, offset for sidebar */}
         <div className="lg:ml-[220px]">

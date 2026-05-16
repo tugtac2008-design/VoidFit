@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { useIsMobile } from '../hooks/useIsMobile'
 import {
   Flame, Droplets, Dumbbell, Trophy, Zap,
   Plus, ChevronRight, Scale, Target, Activity, TrendingUp
@@ -27,6 +28,7 @@ const card = {
 }
 
 export default function Dashboard() {
+  const isMobile = useIsMobile()
   const {
     user, getMealEntriesForDate, getWaterForDate, workouts,
     activeWorkout, personalRecords, measurements, addWater, settings,
@@ -93,7 +95,7 @@ export default function Dashboard() {
       <motion.div custom={0} variants={card}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: 32, fontWeight: 900, color: '#fff', lineHeight: 1.15, letterSpacing: '-0.5px', margin: 0 }}>
+            <h1 style={{ fontSize: isMobile ? 24 : 32, fontWeight: 900, color: '#fff', lineHeight: 1.15, letterSpacing: '-0.5px', margin: 0 }}>
               {greetingTime()},{' '}
               <span style={{ color: '#00d4ff', textShadow: '0 0 20px rgba(0,212,255,0.4)' }}>
                 {user.name}
@@ -120,7 +122,7 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Row 1 - 4 stat cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? 10 : 14 }}>
         {/* Calories */}
         <motion.div custom={1} variants={card}>
           <div className="glass-card" style={{ textAlign: 'center' }}>
@@ -229,16 +231,18 @@ export default function Dashboard() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-          <MacroRing
-            value={totals.calories}
-            max={macroGoals.calories}
-            size={140}
-            strokeWidth={10}
-            color="#00d4ff"
-            label={`${Math.round(totals.calories)}`}
-            sublabel="kcal"
-          />
-          <div style={{ flex: 1, minWidth: 200 }}>
+          {!isMobile && (
+            <MacroRing
+              value={totals.calories}
+              max={macroGoals.calories}
+              size={140}
+              strokeWidth={10}
+              color="#00d4ff"
+              label={`${Math.round(totals.calories)}`}
+              sublabel="kcal"
+            />
+          )}
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {[
                 { label: 'Protein', val: totals.protein, goal: macroGoals.protein, color: '#00ff87', unit: 'g' },
@@ -350,7 +354,7 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Row 5 - Weight trend & Active Goals */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
         {/* Weight trend */}
         <motion.div custom={8} variants={card}>
           <div className="glass-card" style={{ height: '100%' }}>
@@ -474,7 +478,7 @@ export default function Dashboard() {
       </div>
 
       {/* Row 6 - Weekly volume + PRs */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
         {/* Weekly volume */}
         <motion.div custom={10} variants={card}>
           <div className="glass-card">

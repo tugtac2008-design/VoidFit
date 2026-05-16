@@ -607,3 +607,44 @@ textarea.input-void { resize: vertical; min-height: 80px; }
 .muscle-legs { color: #ff8c42; }
 .muscle-core { color: #f472b6; }
 .muscle-calves { color: #818cf8; }
+
+/* ─── Mobile responsive ─── */
+@media (max-width: 639px) {
+  .glass-card { padding: 16px !important; }
+
+  /* Modals: full-width on mobile */
+  .modal-backdrop { align-items: flex-end; }
+  .modal-backdrop > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 90dvh;
+    overflow-y: auto;
+  }
+
+  /* Set rows: tighter on mobile */
+  .set-row {
+    grid-template-columns: 24px 1fr 1fr 36px;
+    gap: 6px;
+    font-size: 13px;
+  }
+
+  /* Tabs: scrollable */
+  .tab-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Touch targets: min 44px */
+  .btn { min-height: 40px; }
+  .btn-sm { min-height: 36px; }
+  .nav-item { min-height: 44px; }
+
+  /* Input: prevent iOS zoom (font-size must be >= 16px) */
+  .input-void { font-size: 16px !important; }
+
+  /* Prevent horizontal scroll */
+  .page-wrapper { overflow-x: hidden; }
+}
+
+/* ─── PWA safe area ─── */
+@supports (padding: max(0px)) {
+  .bottom-safe { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+}

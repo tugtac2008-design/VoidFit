@@ -395,7 +395,7 @@ export default function Programs() {
             <span className="text-overline">My Programs</span>
             <span className="badge badge-yellow">{userPrograms.length}</span>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: 16 }}>
             {userPrograms.map((p, i) => (
               <motion.div key={p.id} custom={i} variants={card}>
                 <ProgramCard
@@ -419,7 +419,7 @@ export default function Programs() {
           <span className="text-overline">Program Library</span>
           <span className="badge badge-cyan">{BUILTIN_PROGRAMS.length}</span>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: 16 }}>
           {BUILTIN_PROGRAMS.map((bp, i) => (
             <motion.div key={bp.id} custom={i + 4} variants={card}>
               <ProgramCard

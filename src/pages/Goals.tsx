@@ -335,7 +335,7 @@ export default function Goals() {
             </button>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(300px, 100%), 1fr))', gap: 16 }}>
             {activeGoals.map((goal, i) => (
               <GoalCard
                 key={goal.id}
@@ -378,7 +378,7 @@ export default function Goals() {
                 transition={{ duration: 0.3 }}
                 style={{ marginTop: 16 }}
               >
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))', gap: 12 }}>
                   {completedGoals.map(goal => {
                     const meta = GOAL_META[goal.type]
                     return (
@@ -470,7 +470,7 @@ export default function Goals() {
                   </select>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(140px, 100%), 1fr))', gap: 12 }}>
                   <div>
                     <label style={{ fontSize: 11, color: '#6b6b6b', textTransform: 'uppercase', letterSpacing: '0.8px', display: 'block', marginBottom: 6 }}>
                       Current *
