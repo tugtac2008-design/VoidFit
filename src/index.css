@@ -55,26 +55,30 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Smooth native scrolling on iOS */
-html {
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: none;
-}
-
-/* Prevent pull-to-refresh interfering with app */
-body {
-  overscroll-behavior-y: contain;
-}
-
 html, body {
   background: #080A10;
   color: #ffffff;
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   line-height: 1.6;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Do NOT set overflow-x: hidden here — breaks touch scroll on Android PWA */
+}
+
+/* Native-feel scroll on iOS */
+html {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent pull-to-refresh without blocking scroll */
+body {
+  overscroll-behavior-y: contain;
+}
+
+/* Clip horizontal overflow at the app root, not html/body */
+#root {
+  overflow-x: hidden;
 }
 
 /* ─── Scrollbar ─── */
