@@ -825,15 +825,14 @@ textarea.input-void { resize: vertical; min-height: 80px; }
   bottom: 12px;
   left: 12px;
   right: 12px;
-  background: rgba(8,10,16,0.96);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(8,10,20,0.97);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 26px;
   display: flex;
   z-index: 50;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 20px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);
   padding-bottom: env(safe-area-inset-bottom);
+  pointer-events: auto;
 }
 
 /* ─── Activity log row ─── */

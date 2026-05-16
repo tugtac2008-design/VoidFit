@@ -6,7 +6,7 @@ interface Props { children: ReactNode }
 
 export default function Layout({ children }: Props) {
   return (
-    <div style={{ background: '#080A10', minHeight: '100dvh' }}>
+    <div style={{ background: '#080A10', minHeight: '100dvh', touchAction: 'pan-y' }}>
       {/* Sidebar — desktop only */}
       <div className="hidden lg:block">
         <Sidebar />
