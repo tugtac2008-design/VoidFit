@@ -852,3 +852,279 @@ textarea.input-void { resize: vertical; min-height: 80px; }
   font-weight: 700;
   color: #fff;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   CINEMATIC BIOMETRIC OS — design system additions
+   ════════════════════════════════════════════════════════════════ */
+
+/* ─── Global background: deep obsidian with radial hot-spot ─── */
+html, body, #root {
+  background: #060608 !important;
+}
+
+/* ─── Rajdhani tactical font utility ─── */
+.font-tactical {
+  font-family: 'Rajdhani', 'Inter', sans-serif;
+}
+
+/* ─── Tactical metric number ─── */
+.tech-metric {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #FF9028;
+  text-shadow: 0 0 10px rgba(255,144,40,0.45);
+}
+
+/* ─── Tactical label ─── */
+.tech-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.3);
+  font-size: 9px;
+}
+
+/* ─── System output text ─── */
+.sys-output {
+  font-family: 'Rajdhani', 'JetBrains Mono', monospace;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+/* ─── WAVE obsidian glass card ─── */
+.wave-card {
+  background: linear-gradient(135deg, rgba(20,20,28,0.85) 0%, rgba(10,10,14,0.92) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,107,0,0.12);
+  border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 12px 32px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(0,0,0,0.4);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.wave-card:hover {
+  border-color: rgba(255,107,0,0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 0 24px rgba(255,107,0,0.1),
+    0 16px 40px rgba(0,0,0,0.6);
+}
+
+/* ─── CSS Liquid vial (macro fuel column) ─── */
+.vial-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.vial-container {
+  width: 54px;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(20,20,28,0.92), rgba(10,10,14,0.96));
+  border: 1px solid rgba(255,107,0,0.18);
+  border-radius: 10px 10px 8px 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 20px rgba(0,0,0,0.7),
+    inset 2px 0 4px rgba(255,255,255,0.015),
+    0 0 10px rgba(255,107,0,0.05);
+}
+.vial-tick {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  pointer-events: none;
+}
+.vial-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(0deg, rgba(200,60,0,0.88) 0%, rgba(255,144,40,0.68) 70%, rgba(255,180,80,0.3) 100%);
+  border-top: 2px solid #FFB800;
+  box-shadow: 0 -4px 14px rgba(255,120,0,0.45);
+  transition: height 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.vial-fill.over {
+  background: linear-gradient(0deg, rgba(180,30,60,0.9) 0%, rgba(255,59,92,0.65) 100%);
+  border-top-color: #ff3b5c;
+  box-shadow: 0 -4px 14px rgba(255,59,92,0.45);
+}
+.vial-pct {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+  z-index: 1;
+}
+
+/* ─── Biometric hero container ─── */
+.biometric-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 8px 0;
+}
+.biometric-hero::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(255,144,40,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ─── Metric chip (secondary metrics) ─── */
+.metric-chip {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(20,20,28,0.88), rgba(10,10,14,0.94));
+  border: 1px solid rgba(255,107,0,0.14);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* ─── System status ticker ─── */
+.sys-bar {
+  background: linear-gradient(135deg, rgba(14,14,20,0.9), rgba(8,8,12,0.95));
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.025);
+}
+
+/* ─── Scanner rotation ─── */
+@keyframes scannerRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Breathing amber glow on hero ─── */
+@keyframes ambientPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+.ambient-pulse { animation: ambientPulse 3s ease-in-out infinite; }
+
+/* ─── Scan line overlay on biometric core ─── */
+.scan-lines {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(255,255,255,0.008) 2px,
+    rgba(255,255,255,0.008) 4px
+  );
+  pointer-events: none;
+}
+
+/* ─── Section divider with amber center ─── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0;
+}
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,144,40,0.15));
+}
+.section-divider::after {
+  background: linear-gradient(270deg, transparent, rgba(255,144,40,0.15));
+}
+
+/* ─── Fuel reserves section ─── */
+.fuel-section {
+  background: linear-gradient(135deg, rgba(18,18,26,0.85), rgba(10,10,14,0.9));
+  border: 1px solid rgba(255,107,0,0.1);
+  border-radius: 20px;
+  padding: 18px 20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* ─── Muscle ring item ─── */
+.muscle-ring-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 56px;
+  flex-shrink: 0;
+}
+
+/* ─── CTA action button ─── */
+.cta-amber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 15px 22px;
+  background: linear-gradient(135deg, rgba(255,178,96,0.14), rgba(255,144,40,0.08));
+  border: 1px solid rgba(255,144,40,0.3);
+  border-radius: 16px;
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 20px rgba(255,144,40,0.06);
+}
+.cta-amber:hover {
+  background: linear-gradient(135deg, rgba(255,178,96,0.22), rgba(255,144,40,0.14));
+  border-color: rgba(255,144,40,0.5);
+  box-shadow: 0 0 30px rgba(255,144,40,0.14);
+}
+
+/* ─── Recent log row ─── */
+.ops-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.045);
+}
+.ops-row:last-child { border-bottom: none; }
+.ops-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255,144,40,0.1);
+  border: 1px solid rgba(255,144,40,0.18);
+}

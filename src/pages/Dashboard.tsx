@@ -1,102 +1,186 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useIsMobile } from '../hooks/useIsMobile'
-import {
-  Plus, Dumbbell, Target, ChevronRight, Zap, Flame, Activity, Droplets
-} from 'lucide-react'
+import { Plus, Dumbbell, ChevronRight, Zap } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import AnimatedNumber from '../components/AnimatedNumber'
-import { TODAY, greetingTime, pct, fmt, formatDuration, muscleColor } from '../utils/format'
+import { TODAY, fmt, formatDuration } from '../utils/format'
 import { calcStreak } from '../utils/calculations'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
-// ── Hero metric ring ──────────────────────────────────────────────────────────
-function HeroRing({
-  value, max, color, glow, label, sublabel, size = 100
-}: {
-  value: number; max: number; color: string; glow: string
-  label: string; sublabel: string; size?: number
-}) {
-  const sw = 8
-  const r = (size - sw) / 2
-  const circ = 2 * Math.PI * r
-  const pctVal = Math.min(Math.max(value / max, 0), 1)
-  const offset = circ * (1 - pctVal)
+// ── System status line ────────────────────────────────────────────────────────
+function statusLine(score: number, waterPct: number): { text: string; color: string } {
+  if (score === 0) return { text: 'AWAITING BIOMETRIC INPUT', color: 'rgba(255,144,40,0.45)' }
+  if (score >= 80 && waterPct >= 0.7) return { text: 'ALL SYSTEMS NOMINAL', color: '#00c870' }
+  if (score < 40) return { text: 'CNS LOAD · CRITICAL', color: '#ff3b5c' }
+  if (waterPct < 0.35) return { text: 'HYDRATION DEFICIT DETECTED', color: '#ff9028' }
+  if (score < 60) return { text: 'CNS LOAD · ELEVATED', color: '#ffd700' }
+  return { text: 'SYSTEM NOMINAL', color: '#ff9028' }
+}
+
+// ── Biometric Core (dominant hero) ───────────────────────────────────────────
+function BiometricCore({ score, size }: { score: number; size: number }) {
+  const pctVal = Math.min(score / 100, 1)
+  const color = score >= 75 ? '#ff9028' : score >= 50 ? '#ffd700' : score > 0 ? '#ff4d6a' : 'rgba(255,144,40,0.25)'
+  const glow = `${color}80`
+  const sw = 7
+  const r1 = size / 2 - 5
+  const r2 = size / 2 - 18
+  const r3 = size / 2 - 33
+  const c2 = 2 * Math.PI * r2
+  const c3 = 2 * Math.PI * r3
+
+  const label = score >= 80 ? 'PEAK' : score >= 60 ? 'NOMINAL' : score >= 40 ? 'DEGRADED' : score > 0 ? 'CRITICAL' : 'NO DATA'
+
   return (
     <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', position: 'absolute' }}>
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={sw} />
+      {/* Ambient glow */}
+      <div style={{
+        position: 'absolute', inset: -30, pointerEvents: 'none',
+        background: `radial-gradient(circle, ${color}12 0%, transparent 62%)`,
+      }} className="ambient-pulse" />
+
+      {/* Scan lines overlay */}
+      <div className="scan-lines" />
+
+      {/* Rotating scanner ring */}
+      <div style={{ position: 'absolute', inset: 0, animation: 'scannerRotate 14s linear infinite' }}>
+        <svg width={size} height={size}>
+          <circle cx={size/2} cy={size/2} r={r1} fill="none" stroke="rgba(255,144,40,0.14)" strokeWidth={1} strokeDasharray="3 10" />
+        </svg>
+      </div>
+
+      {/* Counter-rotating inner scanner */}
+      <div style={{ position: 'absolute', inset: 0, animation: 'scannerRotate 22s linear infinite reverse' }}>
+        <svg width={size} height={size}>
+          <circle cx={size/2} cy={size/2} r={r3 - 4} fill="none" stroke="rgba(255,144,40,0.08)" strokeWidth={1} strokeDasharray="2 14" />
+        </svg>
+      </div>
+
+      {/* Main SVG arcs */}
+      <svg width={size} height={size} style={{ position: 'absolute', transform: 'rotate(-90deg)' }}>
+        {/* Outer ring track */}
+        <circle cx={size/2} cy={size/2} r={r2} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={sw} />
+        {/* Outer ring fill */}
         <motion.circle
-          cx={size/2} cy={size/2} r={r} fill="none"
-          stroke={color} strokeWidth={sw} strokeLinecap="round"
-          strokeDasharray={circ}
-          initial={{ strokeDashoffset: circ }}
-          animate={{ strokeDashoffset: offset }}
-          transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
-          style={{ filter: `drop-shadow(0 0 8px ${glow})` }}
+          cx={size/2} cy={size/2} r={r2}
+          fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round"
+          strokeDasharray={c2}
+          initial={{ strokeDashoffset: c2 }}
+          animate={{ strokeDashoffset: c2 * (1 - pctVal) }}
+          transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
+          style={{ filter: `drop-shadow(0 0 12px ${glow})` }}
+        />
+        {/* Inner ring track */}
+        <circle cx={size/2} cy={size/2} r={r3} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth={3.5} />
+        {/* Inner ring fill (slightly ahead) */}
+        <motion.circle
+          cx={size/2} cy={size/2} r={r3}
+          fill="none" stroke={color} strokeWidth={3.5} strokeLinecap="round"
+          strokeDasharray={c3}
+          initial={{ strokeDashoffset: c3 }}
+          animate={{ strokeDashoffset: c3 * (1 - Math.min(pctVal * 1.2, 1)) }}
+          transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1], delay: 0.45 }}
+          style={{ opacity: 0.4, filter: `drop-shadow(0 0 6px ${glow})` }}
         />
       </svg>
-      <div style={{ textAlign: 'center', zIndex: 1 }}>
-        <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 22, fontWeight: 800, color, lineHeight: 1 }}>
-          {Math.round(pctVal * 100)}
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 400 }}>%</span>
+
+      {/* Core readout */}
+      <div style={{ textAlign: 'center', zIndex: 2 }}>
+        <div style={{
+          fontFamily: 'Rajdhani, sans-serif',
+          fontSize: score > 0 ? size * 0.275 : size * 0.16,
+          fontWeight: 700, color, lineHeight: 1,
+          textShadow: `0 0 28px ${color}55`,
+          letterSpacing: '-1px',
+        }}>
+          {score > 0 ? score : '—'}
         </div>
-        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '1px', marginTop: 3 }}>{sublabel}</div>
+        <div style={{
+          fontFamily: 'Rajdhani, sans-serif', fontSize: 8.5,
+          fontWeight: 600, color, opacity: 0.65,
+          letterSpacing: '2.5px', textTransform: 'uppercase', marginTop: 2,
+        }}>
+          {label}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Macro vial (liquid fuel column) ──────────────────────────────────────────
+function MacroVial({ label, value, goal, unit }: { label: string; value: number; goal: number; unit: string }) {
+  const pctVal = goal > 0 ? Math.min(value / goal, 1) : 0
+  const isOver = value > goal * 1.05
+  return (
+    <div className="vial-wrap">
+      <div className="vial-container">
+        {[0.25, 0.5, 0.75].map(t => (
+          <div key={t} className="vial-tick" style={{ bottom: `${t * 100}%` }} />
+        ))}
+        <motion.div
+          className={`vial-fill${isOver ? ' over' : ''}`}
+          initial={{ height: 0 }}
+          animate={{ height: `${pctVal * 100}%` }}
+          transition={{ duration: 1.3, ease: [0.4, 0, 0.2, 1], delay: 0.6 }}
+        />
+        <div className="vial-pct">{Math.round(pctVal * 100)}%</div>
+      </div>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{
+          fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 700,
+          color: isOver ? '#ff4d6a' : '#fff', lineHeight: 1,
+        }}>
+          {Math.round(value)}<span style={{ fontSize: 9, color: 'rgba(255,255,255,0.28)' }}>{unit}</span>
+        </div>
+        <div style={{
+          fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 600,
+          color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase',
+          letterSpacing: '1.2px', marginTop: 2,
+        }}>{label}</div>
+        <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.14)', marginTop: 1 }}>/{goal}{unit}</div>
       </div>
     </div>
   )
 }
 
 // ── Muscle mini ring ──────────────────────────────────────────────────────────
-function MuscleRing({ label, color, value, max }: { label: string; color: string; value: number; max: number }) {
+function MuscleRing({ label, value, max }: { label: string; value: number; max: number }) {
   const size = 52
   const sw = 4
   const r = (size - sw) / 2
   const circ = 2 * Math.PI * r
   const pctVal = max > 0 ? Math.min(value / max, 1) : 0
-  const offset = circ * (1 - pctVal)
+  const color = pctVal > 0.65 ? '#ff9028' : pctVal > 0.35 ? '#ffb260' : 'rgba(255,144,40,0.3)'
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, minWidth: 56 }}>
+    <div className="muscle-ring-item">
       <div style={{ position: 'relative', width: size, height: size }}>
         <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', position: 'absolute' }}>
-          <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={sw} />
+          <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={sw} />
           <motion.circle
             cx={size/2} cy={size/2} r={r} fill="none"
             stroke={color} strokeWidth={sw} strokeLinecap="round"
             strokeDasharray={circ}
             initial={{ strokeDashoffset: circ }}
-            animate={{ strokeDashoffset: offset }}
-            transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.4 }}
-            style={{ filter: `drop-shadow(0 0 4px ${color}90)` }}
+            animate={{ strokeDashoffset: circ * (1 - pctVal) }}
+            transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.5 }}
+            style={{ filter: `drop-shadow(0 0 4px ${color}80)` }}
           />
         </svg>
         <div style={{
           position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 9, fontFamily: 'JetBrains Mono, monospace', color, fontWeight: 700,
+          fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 700, color,
         }}>
           {Math.round(pctVal * 100)}%
         </div>
       </div>
-      <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.8px', textAlign: 'center' }}>
+      <div style={{
+        fontFamily: 'Rajdhani, sans-serif', fontSize: 8, fontWeight: 600,
+        color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', letterSpacing: '0.8px',
+      }}>
         {label}
       </div>
-    </div>
-  )
-}
-
-// ── Quick stat pill ───────────────────────────────────────────────────────────
-function QuickStat({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: string; color: string }) {
-  return (
-    <div style={{
-      flex: 1, minWidth: 0,
-      background: 'rgba(255,255,255,0.04)',
-      border: '1px solid rgba(255,255,255,0.07)',
-      borderRadius: 16, padding: '12px 10px',
-      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-    }}>
-      <div style={{ color, opacity: 0.85 }}>{icon}</div>
-      <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, fontWeight: 700, color: '#fff', lineHeight: 1 }}>{value}</div>
-      <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>{label}</div>
     </div>
   )
 }
@@ -104,22 +188,23 @@ function QuickStat({ icon, label, value, color }: { icon: React.ReactNode; label
 // ─────────────────────────────────────────────────────────────────────────────
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  show: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.4, ease: [0.4,0,0.2,1] } }),
+  hidden: { opacity: 0, y: 18 },
+  show: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.07, duration: 0.42, ease: [0.4, 0, 0.2, 1] } }),
 }
+
+const MUSCLES = ['Chest', 'Back', 'Legs', 'Shoulders', 'Biceps', 'Triceps']
 
 export default function Dashboard() {
   const isMobile = useIsMobile()
   const {
     user, getMealEntriesForDate, getWaterForDate, workouts,
-    activeWorkout, measurements, addWater, xp, goals, getTodayReadiness
+    activeWorkout, addWater, xp, goals, getTodayReadiness
   } = useStore()
   const today = TODAY()
-  const [weightInput, setWeightInput] = useState('')
 
   const entries = getMealEntriesForDate(today)
   const water = getWaterForDate(today)
-  const macroGoals = user.macroGoals
+  const { calories: calGoal, protein: protGoal, carbs: carbGoal, fat: fatGoal, water: waterGoal } = user.macroGoals
 
   const totals = useMemo(() => entries.reduce((acc, e) => {
     const s = e.servings
@@ -130,68 +215,60 @@ export default function Dashboard() {
     return acc
   }, { calories: 0, protein: 0, carbs: 0, fat: 0 }), [entries])
 
-  const workoutDates = workouts.map(w => w.date)
-  const streak = calcStreak(workoutDates)
+  const streak = calcStreak(workouts.map(w => w.date))
   const todayWorkout = workouts.find(w => w.date === today)
   const level = Math.floor(xp / 500) + 1
   const xpInLevel = xp % 500
   const readiness = getTodayReadiness()
-  const activeGoals = goals.filter(g => g.status === 'active').slice(0, 3)
+  const score = readiness?.score ?? 0
+  const activeGoal = goals.filter(g => g.status === 'active')[0]
 
-  // Weekly muscle volume
   const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - 7)
   const weekWorkouts = workouts.filter(w => new Date(w.date) >= weekStart)
   const muscleVolume: Record<string, number> = {}
   weekWorkouts.forEach(w => w.exercises.forEach(ex => {
-    const v = ex.sets.filter(s => s.completed).reduce((s, st) => s + st.weight * st.reps, 0)
+    const v = ex.sets.filter(s => s.completed).reduce((sum, st) => sum + st.weight * st.reps, 0)
     muscleVolume[ex.exercise.muscleGroup] = (muscleVolume[ex.exercise.muscleGroup] ?? 0) + v
   }))
   const maxVol = Math.max(...Object.values(muscleVolume), 1)
-  const MUSCLE_DISPLAY = ['Chest', 'Back', 'Legs', 'Shoulders', 'Biceps', 'Triceps']
-  const muscleRings = MUSCLE_DISPLAY.map(m => ({
-    label: m,
-    color: muscleColor(m),
-    value: muscleVolume[m] ?? 0,
-    max: maxVol
-  }))
 
+  const waterPct = waterGoal > 0 ? water / waterGoal : 0
+  const status = statusLine(score, waterPct)
   const recentWorkouts = workouts.slice(-3).reverse()
+  const heroSize = isMobile ? 152 : 172
 
   return (
-    <motion.div initial="hidden" animate="show" className="py-4 space-y-5">
+    <motion.div initial="hidden" animate="show" style={{ paddingTop: 8, paddingBottom: 8, display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-      {/* ── Header ── */}
+      {/* ── 1. OPERATOR HEADER ── */}
       <motion.div custom={0} variants={fadeUp}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+        <div className="sys-bar">
           <div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 4 }}>
-              {fmt.date(new Date())} · {greetingTime()}
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.28)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 3 }}>
+              OPERATOR · {fmt.date(new Date())}
             </div>
-            <h1 style={{ margin: 0, fontSize: isMobile ? 26 : 34, fontWeight: 900, letterSpacing: '-0.5px', lineHeight: 1.1 }}>
-              Hey,{' '}
-              <span style={{
-                background: 'linear-gradient(90deg, #fff 0%, #ffb260 60%, #ff9028 100%)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>
-                {user.name}
-              </span>
-            </h1>
+            <div style={{
+              fontFamily: 'Rajdhani, sans-serif', fontSize: isMobile ? 22 : 26, fontWeight: 700, lineHeight: 1,
+              background: 'linear-gradient(90deg, #fff 0%, #ffb260 55%, #ff9028 100%)',
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              letterSpacing: '0.5px',
+            }}>
+              {user.name.toUpperCase()}
+            </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: 5 }}>
             {streak > 0 && (
               <div style={{
-                display: 'flex', alignItems: 'center', gap: 5,
-                padding: '6px 12px', borderRadius: 20,
-                background: 'rgba(255,140,66,0.1)', border: '1px solid rgba(255,140,66,0.25)',
+                fontFamily: 'Rajdhani, sans-serif', fontSize: 11, fontWeight: 700,
+                color: '#ff9028', letterSpacing: '1px',
+                display: 'flex', alignItems: 'center', gap: 4,
               }}>
-                <Flame size={13} style={{ color: '#ff8c42' }} />
-                <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 14, fontWeight: 800, color: '#ff8c42' }}>{streak}</span>
+                🔥 <span>{streak}D STREAK</span>
               </div>
             )}
             <div style={{
-              padding: '5px 10px', borderRadius: 20,
-              background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.2)',
-              fontSize: 11, color: '#a855f7', fontWeight: 600,
+              fontFamily: 'Rajdhani, sans-serif', fontSize: 10, fontWeight: 600,
+              color: 'rgba(168,85,247,0.9)', letterSpacing: '1.5px',
             }}>
               LVL {level}
             </div>
@@ -199,304 +276,274 @@ export default function Dashboard() {
         </div>
       </motion.div>
 
-      {/* ── 3 Hero Ring Cards ── */}
+      {/* ── 2. BIOMETRIC CORE (dominant hero) ── */}
       <motion.div custom={1} variants={fadeUp}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-          {/* Recovery */}
-          <div className="ring-card">
-            <HeroRing
-              value={readiness?.score ?? 0}
-              max={100}
-              color="#00ff87"
-              glow="rgba(0,255,135,0.5)"
-              label="Recovery"
-              sublabel="score"
-              size={isMobile ? 88 : 100}
-            />
-            <div className="ring-label">Recovery</div>
-            <div className="ring-value">{readiness ? readiness.score : '—'}</div>
-          </div>
+        <div className="biometric-hero">
+          <BiometricCore score={score} size={heroSize} />
 
-          {/* Macros */}
-          <div className="ring-card" style={{ borderColor: 'rgba(255,144,40,0.15)' }}>
-            <HeroRing
-              value={totals.calories}
-              max={macroGoals.calories}
-              color="#ff9028"
-              glow="rgba(255,144,40,0.5)"
-              label="Macros"
-              sublabel="cals"
-              size={isMobile ? 88 : 100}
-            />
-            <div className="ring-label">Macros</div>
-            <div className="ring-value">{Math.round(totals.calories)}</div>
-          </div>
-
-          {/* Hydration */}
-          <div className="ring-card">
-            <HeroRing
-              value={water}
-              max={macroGoals.water}
-              color="#00d4ff"
-              glow="rgba(0,212,255,0.5)"
-              label="Hydration"
-              sublabel="water"
-              size={isMobile ? 88 : 100}
-            />
-            <div className="ring-label">Hydration</div>
-            <div className="ring-value">{(water/1000).toFixed(1)}L</div>
+          {/* System status line below hero */}
+          <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: status.color, boxShadow: `0 0 6px ${status.color}` }} />
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 600, color: status.color, letterSpacing: '2px' }}>
+              {status.text}
+            </span>
           </div>
         </div>
       </motion.div>
 
-      {/* ── Muscle Mini Rings ── */}
+      {/* ── 3. SECONDARY METRICS (2 chips) ── */}
       <motion.div custom={2} variants={fadeUp}>
-        <div className="glass-card" style={{ padding: '16px 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: 700 }}>
-              Weekly Muscle Volume
+        <div style={{ display: 'flex', gap: 10 }}>
+          {/* Macros */}
+          <div className="metric-chip">
+            <div className="tech-label" style={{ marginBottom: 5 }}>Macros</div>
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 24, fontWeight: 700, color: '#ff9028', lineHeight: 1, textShadow: '0 0 14px rgba(255,144,40,0.4)' }}>
+              <AnimatedNumber value={Math.round(totals.calories)} />
             </div>
-            <Link to="/workout" style={{ fontSize: 10, color: '#ff9028', textDecoration: 'none', letterSpacing: '0.5px' }}>
-              View →
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.25)', marginTop: 3, letterSpacing: '1px' }}>
+              / {calGoal} KCAL
+            </div>
+            <div style={{ marginTop: 8, height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+              <motion.div
+                style={{ height: '100%', borderRadius: 2, background: '#ff9028', boxShadow: '0 0 6px rgba(255,144,40,0.5)' }}
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.min((totals.calories / calGoal) * 100, 100)}%` }}
+                transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
+              />
+            </div>
+          </div>
+
+          {/* Hydration */}
+          <div className="metric-chip">
+            <div className="tech-label" style={{ marginBottom: 5 }}>Hydration</div>
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 24, fontWeight: 700, color: '#00c4e8', lineHeight: 1, textShadow: '0 0 14px rgba(0,196,232,0.4)' }}>
+              {(water / 1000).toFixed(1)}L
+            </div>
+            <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.25)', marginTop: 3, letterSpacing: '1px' }}>
+              / {(waterGoal / 1000).toFixed(1)} TARGET
+            </div>
+            <div style={{ marginTop: 8, height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+              <motion.div
+                style={{ height: '100%', borderRadius: 2, background: '#00c4e8', boxShadow: '0 0 6px rgba(0,196,232,0.4)' }}
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.min(waterPct * 100, 100)}%` }}
+                transition={{ duration: 1, ease: 'easeOut', delay: 0.6 }}
+              />
+            </div>
+            {/* Quick-add water */}
+            <div style={{ display: 'flex', gap: 4, marginTop: 10 }}>
+              {[250, 500].map(ml => (
+                <button key={ml} onClick={() => addWater(today, ml)} style={{
+                  flex: 1, background: 'rgba(0,196,232,0.07)', border: '1px solid rgba(0,196,232,0.18)',
+                  borderRadius: 7, padding: '5px 0', color: '#00c4e8',
+                  fontFamily: 'Rajdhani, sans-serif', fontSize: 11, fontWeight: 600,
+                  cursor: 'pointer', letterSpacing: '0.5px',
+                }}>+{ml}ml</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── 4. FUEL RESERVES (macro vials) ── */}
+      <motion.div custom={3} variants={fadeUp}>
+        <div className="fuel-section">
+          <div style={{ marginBottom: 16 }}>
+            <div className="section-divider">
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 700, color: 'rgba(255,144,40,0.55)', letterSpacing: '2.5px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                FUEL RESERVES
+              </span>
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? 20 : 28 }}>
+            <MacroVial label="Protein" value={totals.protein} goal={protGoal} unit="g" />
+            <MacroVial label="Carbs" value={totals.carbs} goal={carbGoal} unit="g" />
+            <MacroVial label="Fat" value={totals.fat} goal={fatGoal} unit="g" />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ── 5. ACTION CTAs ── */}
+      <motion.div custom={4} variants={fadeUp}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <Link to="/nutrition" className="cta-amber">
+            <Plus size={16} style={{ color: '#ff9028', flexShrink: 0 }} />
+            <span>Log Meal</span>
+            <span style={{ marginLeft: 'auto', fontFamily: 'Rajdhani, sans-serif', fontSize: 10, color: 'rgba(255,144,40,0.5)', letterSpacing: '0.5px' }}>
+              {Math.max(0, Math.round(calGoal - totals.calories))} KCAL LEFT
+            </span>
+          </Link>
+
+          <Link to="/workout" style={{
+            display: 'flex', alignItems: 'center', gap: 10,
+            padding: '13px 20px',
+            background: activeWorkout
+              ? 'linear-gradient(135deg, rgba(0,255,135,0.08), rgba(0,200,100,0.04))'
+              : 'rgba(255,255,255,0.025)',
+            border: `1px solid ${activeWorkout ? 'rgba(0,255,135,0.2)' : 'rgba(255,255,255,0.07)'}`,
+            borderRadius: 16, textDecoration: 'none', transition: 'all 0.2s ease',
+          }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: 9, flexShrink: 0,
+              background: activeWorkout ? 'rgba(0,255,135,0.12)' : 'rgba(255,144,40,0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Dumbbell size={14} style={{ color: activeWorkout ? '#00ff87' : '#ff9028' }} />
+              {activeWorkout && <div style={{ position: 'absolute', top: -2, right: -2, width: 7, height: 7, borderRadius: '50%', background: '#00ff87', boxShadow: '0 0 6px rgba(0,255,135,0.9)' }} />}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: '0.8px', textTransform: 'uppercase' }}>
+                {activeWorkout ? activeWorkout.name : todayWorkout ? todayWorkout.name : 'Start Workout'}
+              </div>
+              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.25)', letterSpacing: '1px', marginTop: 1, textTransform: 'uppercase' }}>
+                {activeWorkout ? '· In progress' : todayWorkout ? `· Completed · ${formatDuration(todayWorkout.duration ?? 0)}` : '· No session logged today'}
+              </div>
+            </div>
+            <ChevronRight size={14} style={{ color: 'rgba(255,255,255,0.2)', flexShrink: 0 }} />
+          </Link>
+        </div>
+      </motion.div>
+
+      {/* ── 6. MUSCLE VOLUME ANALYSIS ── */}
+      <motion.div custom={5} variants={fadeUp}>
+        <div className="wave-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+            <div className="section-divider" style={{ flex: 1, marginRight: 12 }}>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 700, color: 'rgba(255,144,40,0.5)', letterSpacing: '2px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                MUSCLE TELEMETRY
+              </span>
+            </div>
+            <Link to="/workout" style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, color: 'rgba(255,144,40,0.6)', textDecoration: 'none', letterSpacing: '1px', flexShrink: 0 }}>
+              DETAIL →
             </Link>
           </div>
-          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
-            {muscleRings.map(m => (
-              <MuscleRing key={m.label} {...m} />
+          <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 2, WebkitOverflowScrolling: 'touch' as const }}>
+            {MUSCLES.map(m => (
+              <MuscleRing key={m} label={m} value={muscleVolume[m] ?? 0} max={maxVol} />
             ))}
           </div>
         </div>
       </motion.div>
 
-      {/* ── Log Meal CTA ── */}
-      <motion.div custom={3} variants={fadeUp}>
-        <Link to="/nutrition" style={{ textDecoration: 'none', display: 'block' }}>
-          <div style={{
-            width: '100%', padding: '16px 24px',
-            background: 'linear-gradient(135deg, rgba(255,178,96,0.15), rgba(255,144,40,0.1))',
-            border: '1px solid rgba(255,144,40,0.3)',
-            borderRadius: 18,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-            cursor: 'pointer',
-            boxShadow: '0 0 30px rgba(255,144,40,0.08)',
-            transition: 'all 0.2s ease',
-          }}>
-            <div style={{
-              width: 34, height: 34, borderRadius: 10,
-              background: 'rgba(255,144,40,0.2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              <Plus size={18} style={{ color: '#ff9028' }} />
-            </div>
-            <div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: '#fff', letterSpacing: '0.3px' }}>LOG MEAL</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.5px' }}>
-                {Math.round(macroGoals.calories - totals.calories)} kcal remaining
-              </div>
-            </div>
-            <ChevronRight size={16} style={{ color: 'rgba(255,144,40,0.5)', marginLeft: 'auto' }} />
-          </div>
-        </Link>
-      </motion.div>
-
-      {/* ── Quick Stats Row ── */}
-      <motion.div custom={4} variants={fadeUp}>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <QuickStat icon={<Zap size={14} />} label="Protein" value={`${Math.round(totals.protein)}g`} color="#00ff87" />
-          <QuickStat icon={<Activity size={14} />} label="Carbs" value={`${Math.round(totals.carbs)}g`} color="#ff9028" />
-          <QuickStat icon={<Droplets size={14} />} label="Water" value={`${(water/1000).toFixed(1)}L`} color="#00d4ff" />
-          <QuickStat icon={<Dumbbell size={14} />} label="Streak" value={`${streak}d`} color="#ff8c42" />
-        </div>
-      </motion.div>
-
-      {/* ── Water Quick-Add + Workout ── */}
-      <motion.div custom={5} variants={fadeUp}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          {/* Water quick-add */}
-          <div className="glass-card" style={{ padding: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-              <Droplets size={13} style={{ color: '#00d4ff' }} />
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '1.2px', fontWeight: 700 }}>Add Water</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {[250, 500, 750].map(ml => (
-                <button
-                  key={ml}
-                  onClick={() => addWater(today, ml)}
-                  style={{
-                    background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.15)',
-                    borderRadius: 10, padding: '7px 10px',
-                    color: '#00d4ff', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                    fontFamily: 'Inter, sans-serif', transition: 'all 0.15s ease',
-                  }}
-                >
-                  +{ml}ml
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Workout status */}
-          <div className={`glass-card ${activeWorkout ? 'card-cyan' : ''}`} style={{ padding: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-              <Dumbbell size={13} style={{ color: '#ff9028' }} />
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '1.2px', fontWeight: 700 }}>Workout</span>
-              {activeWorkout && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00ff87', boxShadow: '0 0 6px rgba(0,255,135,0.8)', marginLeft: 'auto' }} />}
-            </div>
-            {activeWorkout ? (
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{activeWorkout.name}</div>
-                <Link to="/workout" style={{ textDecoration: 'none' }}>
-                  <div style={{
-                    marginTop: 8, padding: '8px', background: 'rgba(255,144,40,0.12)',
-                    border: '1px solid rgba(255,144,40,0.25)', borderRadius: 10,
-                    textAlign: 'center', color: '#ff9028', fontSize: 12, fontWeight: 600,
-                  }}>Continue →</div>
-                </Link>
-              </div>
-            ) : todayWorkout ? (
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{todayWorkout.name}</div>
-                <div style={{ fontSize: 10, color: '#00ff87', fontWeight: 600 }}>✓ Completed</div>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 2 }}>{formatDuration(todayWorkout.duration ?? 0)}</div>
-              </div>
-            ) : (
-              <div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginBottom: 10 }}>No workout today</div>
-                <Link to="/workout" style={{ textDecoration: 'none' }}>
-                  <div style={{
-                    padding: '8px', background: 'rgba(255,144,40,0.1)',
-                    border: '1px solid rgba(255,144,40,0.2)', borderRadius: 10,
-                    textAlign: 'center', color: '#ff9028', fontSize: 12, fontWeight: 600,
-                  }}>Start →</div>
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* ── Active Goal / Challenge card ── */}
-      {activeGoals.length > 0 && (
+      {/* ── 7. ACTIVE MISSION (goal card) ── */}
+      {activeGoal && (
         <motion.div custom={6} variants={fadeUp}>
           <div className="challenge-card">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(255,45,120,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Target size={14} style={{ color: '#ff2d78' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#ff9028', boxShadow: '0 0 8px rgba(255,144,40,0.8)', flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, color: 'rgba(255,144,40,0.6)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 2 }}>
+                  ACTIVE MISSION
                 </div>
-                <div>
-                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Active Goal</div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>{activeGoals[0].title}</div>
+                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 15, fontWeight: 700, color: '#fff', letterSpacing: '0.3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {activeGoal.title.toUpperCase()}
                 </div>
               </div>
-              <Link to="/goals" style={{ color: 'rgba(255,255,255,0.3)', textDecoration: 'none' }}>
-                <ChevronRight size={16} />
-              </Link>
+              <Link to="/goals" style={{ color: 'rgba(255,255,255,0.2)', flexShrink: 0 }}><ChevronRight size={16} /></Link>
             </div>
-            <div style={{ marginBottom: 8 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>
-                  {activeGoals[0].currentValue} / {activeGoals[0].targetValue} {activeGoals[0].unit}
-                </span>
-                <span style={{ fontSize: 11, color: '#ff2d78', fontFamily: 'JetBrains Mono, monospace', fontWeight: 600 }}>
-                  {activeGoals[0].targetValue > 0 ? Math.round((activeGoals[0].currentValue / activeGoals[0].targetValue) * 100) : 0}%
-                </span>
-              </div>
-              <div style={{ height: 6, background: 'rgba(255,255,255,0.06)', borderRadius: 6, overflow: 'hidden' }}>
-                <motion.div
-                  style={{ height: '100%', borderRadius: 6, background: 'linear-gradient(90deg, #ff9028, #ff2d78)' }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${activeGoals[0].targetValue > 0 ? Math.min((activeGoals[0].currentValue / activeGoals[0].targetValue) * 100, 100) : 0}%` }}
-                  transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
-                />
-              </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 7 }}>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, color: 'rgba(255,255,255,0.3)', letterSpacing: '1px' }}>
+                {activeGoal.currentValue} / {activeGoal.targetValue} {activeGoal.unit}
+              </span>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, color: '#ff9028', fontWeight: 700, letterSpacing: '1px' }}>
+                {activeGoal.targetValue > 0 ? Math.round((activeGoal.currentValue / activeGoal.targetValue) * 100) : 0}%
+              </span>
             </div>
-            {activeGoals[0].deadline && (
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span>⏱</span>
-                <span>Deadline: {new Date(activeGoals[0].deadline).toLocaleDateString()}</span>
-                <Link to="/goals" style={{ marginLeft: 'auto', color: '#ff2d78', textDecoration: 'none', fontWeight: 600 }}>View details →</Link>
-              </div>
-            )}
+            <div style={{ height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 4, overflow: 'hidden' }}>
+              <motion.div
+                style={{ height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, #ff9028, #ff2d78)', boxShadow: '0 0 8px rgba(255,144,40,0.4)' }}
+                initial={{ width: 0 }}
+                animate={{ width: `${activeGoal.targetValue > 0 ? Math.min((activeGoal.currentValue / activeGoal.targetValue) * 100, 100) : 0}%` }}
+                transition={{ duration: 1.2, ease: 'easeOut', delay: 0.7 }}
+              />
+            </div>
           </div>
         </motion.div>
       )}
 
-      {/* ── Recent Activity ── */}
+      {/* ── 8. RECENT OPERATIONS ── */}
       <motion.div custom={7} variants={fadeUp}>
-        <div className="glass-card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: 700 }}>
-              Recent Activity
+        <div className="wave-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+            <div className="section-divider" style={{ flex: 1, marginRight: 12 }}>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 700, color: 'rgba(255,144,40,0.5)', letterSpacing: '2px', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+                RECENT OPERATIONS
+              </span>
             </div>
-            <Link to="/workout" style={{ fontSize: 10, color: '#ff9028', textDecoration: 'none' }}>See all</Link>
+            <Link to="/workout" style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, color: 'rgba(255,144,40,0.6)', textDecoration: 'none', letterSpacing: '1px', flexShrink: 0 }}>
+              ALL →
+            </Link>
           </div>
 
           {recentWorkouts.length > 0 ? (
-            <div>
-              {recentWorkouts.map((workout, i) => (
-                <div key={workout.id} className="log-row">
+            recentWorkouts.map((workout, i) => (
+              <div key={workout.id} className="ops-row">
+                <div className="ops-icon" style={{
+                  background: i === 0 ? 'rgba(255,144,40,0.1)' : 'rgba(255,255,255,0.05)',
+                  borderColor: i === 0 ? 'rgba(255,144,40,0.2)' : 'rgba(255,255,255,0.07)',
+                }}>
+                  <Dumbbell size={14} style={{ color: i === 0 ? '#ff9028' : 'rgba(255,255,255,0.35)' }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
-                    width: 38, height: 38, borderRadius: 12, flexShrink: 0,
-                    background: `rgba(${i===0?'255,144,40':i===1?'168,85,247':'0,255,135'},0.12)`,
-                    border: `1px solid rgba(${i===0?'255,144,40':i===1?'168,85,247':'0,255,135'},0.2)`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 700,
+                    color: '#fff', letterSpacing: '0.3px',
+                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                   }}>
-                    <Dumbbell size={16} style={{ color: i===0?'#ff9028':i===1?'#a855f7':'#00ff87' }} />
+                    {workout.name.toUpperCase()}
                   </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {workout.name}
-                    </div>
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>
-                      {workout.exercises.length} exercises · {formatDuration(workout.duration ?? 0)}
-                    </div>
-                  </div>
-                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', flexShrink: 0 }}>
-                    {new Date(workout.date).toLocaleDateString('en', { month: 'short', day: 'numeric' })}
+                  <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.25)', letterSpacing: '1px', marginTop: 1, textTransform: 'uppercase' }}>
+                    {workout.exercises.length} EX · {formatDuration(workout.duration ?? 0)}
                   </div>
                 </div>
-              ))}
-            </div>
+                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.5px', flexShrink: 0 }}>
+                  {new Date(workout.date).toLocaleDateString('en', { month: 'short', day: 'numeric' }).toUpperCase()}
+                </div>
+              </div>
+            ))
           ) : (
-            <div style={{ textAlign: 'center', padding: '20px 0' }}>
-              <div style={{ fontSize: 28, marginBottom: 8 }}>🏋️</div>
-              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>No recent workouts</div>
+            <div style={{ textAlign: 'center', padding: '16px 0' }}>
+              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 11, color: 'rgba(255,255,255,0.2)', letterSpacing: '2px', marginBottom: 12, textTransform: 'uppercase' }}>
+                No operations logged
+              </div>
               <Link to="/workout" className="btn btn-primary btn-sm" style={{ display: 'inline-flex' }}>
-                <Plus size={12} /> Start Workout
+                <Plus size={12} /> Initialize Session
               </Link>
             </div>
           )}
         </div>
       </motion.div>
 
-      {/* ── XP progress ── */}
+      {/* ── 9. NEURAL PROGRESSION (XP) ── */}
       <motion.div custom={8} variants={fadeUp}>
         <div style={{
-          background: 'rgba(168,85,247,0.06)',
-          border: '1px solid rgba(168,85,247,0.15)',
-          borderRadius: 16, padding: '14px 18px',
-          display: 'flex', alignItems: 'center', gap: 14,
+          background: 'linear-gradient(135deg, rgba(168,85,247,0.06), rgba(100,50,180,0.04))',
+          border: '1px solid rgba(168,85,247,0.13)',
+          borderRadius: 16, padding: '13px 18px',
+          display: 'flex', alignItems: 'center', gap: 13,
         }}>
           <div style={{
-            width: 40, height: 40, borderRadius: 12,
-            background: 'rgba(168,85,247,0.15)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+            background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.2)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <Zap size={18} style={{ color: '#a855f7' }} />
+            <Zap size={15} style={{ color: '#a855f7' }} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#fff' }}>Level {level}</span>
-              <span style={{ fontSize: 11, color: '#a855f7', fontFamily: 'JetBrains Mono, monospace' }}>{xpInLevel} / 500 XP</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 7 }}>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: '0.5px' }}>
+                LEVEL {level}
+              </span>
+              <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, color: 'rgba(168,85,247,0.8)', letterSpacing: '1px' }}>
+                <AnimatedNumber value={xpInLevel} /> / 500 XP
+              </span>
             </div>
-            <div style={{ height: 5, background: 'rgba(255,255,255,0.06)', borderRadius: 5, overflow: 'hidden' }}>
+            <div style={{ height: 4, background: 'rgba(255,255,255,0.05)', borderRadius: 4, overflow: 'hidden' }}>
               <motion.div
-                style={{ height: '100%', borderRadius: 5, background: 'linear-gradient(90deg, #a855f7, #7c3aed)' }}
+                style={{ height: '100%', borderRadius: 4, background: 'linear-gradient(90deg, #a855f7, #7c3aed)', boxShadow: '0 0 8px rgba(168,85,247,0.4)' }}
                 initial={{ width: 0 }}
-                animate={{ width: `${(xpInLevel/500)*100}%` }}
-                transition={{ duration: 1, ease: 'easeOut', delay: 0.6 }}
+                animate={{ width: `${(xpInLevel / 500) * 100}%` }}
+                transition={{ duration: 1, ease: 'easeOut', delay: 0.8 }}
               />
             </div>
           </div>
