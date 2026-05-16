@@ -17,7 +17,7 @@ const card = {
 const GOAL_META: Record<GoalType, { icon: string; color: string; label: string }> = {
   weight_loss:  { icon: '⚖️', color: '#ff3b5c',  label: 'Weight Loss' },
   weight_gain:  { icon: '📈', color: '#00ff87',  label: 'Weight Gain' },
-  strength:     { icon: '🏋️', color: '#00d4ff',  label: 'Strength' },
+  strength:     { icon: '🏋️', color: '#ff9028',  label: 'Strength' },
   habit:        { icon: '📅', color: '#a855f7',  label: 'Habit' },
   endurance:    { icon: '🏃', color: '#ff8c42',  label: 'Endurance' },
   body_comp:    { icon: '👤', color: '#ffd700',  label: 'Body Comp' },
@@ -266,18 +266,18 @@ export default function Goals() {
           <div style={{ textAlign: 'center', minWidth: 80 }}>
             <div style={{
               width: 72, height: 72, borderRadius: '50%',
-              background: 'rgba(0,212,255,0.08)', border: '2px solid rgba(0,212,255,0.3)',
+              background: 'rgba(255, 144, 40,0.08)', border: '2px solid rgba(255, 144, 40,0.3)',
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto',
             }}>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 24, fontWeight: 900, color: '#00d4ff', lineHeight: 1 }}>{level}</div>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 24, fontWeight: 900, color: '#ff9028', lineHeight: 1 }}>{level}</div>
               <div style={{ fontSize: 9, color: '#6b6b6b', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Level</div>
             </div>
           </div>
           <div style={{ flex: 1, minWidth: 200 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
               <span style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>XP Progress</span>
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: '#00d4ff' }}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: '#ff9028' }}>
                 {xpInLevel} / {xpToNext} XP
               </span>
             </div>
@@ -322,7 +322,7 @@ export default function Goals() {
       {/* Active Goals */}
       <motion.div custom={3} variants={card}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <Target size={16} style={{ color: '#00d4ff' }} />
+          <Target size={16} style={{ color: '#ff9028' }} />
           <span className="text-overline">Active Goals</span>
           <span className="badge badge-cyan">{activeGoals.length}</span>
         </div>

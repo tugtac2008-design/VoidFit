@@ -17,7 +17,7 @@ const activityLabels: Record<ActivityLevel, string> = {
 const goalLabels: Record<FitnessGoal, { label: string; calAdj: string; color: string }> = {
   lose_fat: { label: 'Lose Fat', calAdj: '−500 kcal', color: '#ff3b5c' },
   maintain: { label: 'Maintain', calAdj: 'TDEE', color: '#b0b0b0' },
-  build_muscle: { label: 'Build Muscle', calAdj: '+250 kcal', color: '#00d4ff' },
+  build_muscle: { label: 'Build Muscle', calAdj: '+250 kcal', color: '#ff9028' },
   aggressive_bulk: { label: 'Aggressive Bulk', calAdj: '+500 kcal', color: '#a855f7' },
   recomp: { label: 'Body Recomp', calAdj: 'TDEE ±0', color: '#00ff87' },
 }
@@ -42,7 +42,7 @@ export default function Profile() {
 
   // Supplement modal
   const [suppModal, setSuppModal] = useState(false)
-  const [suppForm, setSuppForm] = useState({ name: '', dosage: '', timing: 'morning', category: 'morning' as const, color: '#00d4ff' })
+  const [suppForm, setSuppForm] = useState({ name: '', dosage: '', timing: 'morning', category: 'morning' as const, color: '#ff9028' })
 
   const handleSave = () => {
     setUser(form)
@@ -66,7 +66,7 @@ export default function Profile() {
   const categoryColors: Record<string, string> = {
     'morning': '#ffd700',
     'pre-workout': '#00ff87',
-    'intra-workout': '#00d4ff',
+    'intra-workout': '#ff9028',
     'post-workout': '#ff3b5c',
     'evening': '#a855f7',
     'with-meals': '#ff8c42',
@@ -182,7 +182,7 @@ export default function Profile() {
           <div className="grid grid-cols-3 gap-3">
             {[
               { label: 'BMR', val: `${Math.round(bmr)}`, unit: 'kcal/day', color: '#ff8c42' },
-              { label: 'TDEE', val: `${Math.round(tdee)}`, unit: 'kcal/day', color: '#00d4ff' },
+              { label: 'TDEE', val: `${Math.round(tdee)}`, unit: 'kcal/day', color: '#ff9028' },
               { label: 'BMI', val: bmi, unit: bmiCategory(bmi), color: bmi < 25 ? '#00ff87' : '#ff8c42' },
             ].map(({ label, val, unit, color }) => (
               <div key={label} className="card p-3 text-center">
@@ -271,9 +271,9 @@ export default function Profile() {
             </div>
             <div className="space-y-3">
               {[
-                { key: 'calories', label: 'Calories', unit: 'kcal', color: '#00d4ff', step: 50 },
+                { key: 'calories', label: 'Calories', unit: 'kcal', color: '#ff9028', step: 50 },
                 { key: 'protein', label: 'Protein', unit: 'g', color: '#00ff87', step: 5 },
-                { key: 'carbs', label: 'Carbohydrates', unit: 'g', color: '#00d4ff', step: 5 },
+                { key: 'carbs', label: 'Carbohydrates', unit: 'g', color: '#ff9028', step: 5 },
                 { key: 'fat', label: 'Fat', unit: 'g', color: '#a855f7', step: 2 },
                 { key: 'fiber', label: 'Fiber', unit: 'g', color: '#00ff87', step: 1 },
                 { key: 'water', label: 'Water', unit: 'ml', color: '#818cf8', step: 100 },
@@ -518,7 +518,7 @@ export default function Profile() {
             </select>
           </div>
           <button
-            onClick={() => { addSupplement(suppForm); setSuppModal(false); setSuppForm({ name: '', dosage: '', timing: '', category: 'morning', color: '#00d4ff' }) }}
+            onClick={() => { addSupplement(suppForm); setSuppModal(false); setSuppForm({ name: '', dosage: '', timing: '', category: 'morning', color: '#ff9028' }) }}
             disabled={!suppForm.name.trim()}
             className="btn btn-primary w-full"
           >

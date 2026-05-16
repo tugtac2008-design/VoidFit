@@ -45,7 +45,7 @@ export default function BottomNav() {
               alignItems: 'center',
               justifyContent: 'center',
               padding: isWorkout ? '6px 4px 8px' : '10px 4px 8px',
-              color: isActive ? '#00d4ff' : '#525252',
+              color: isActive ? '#ff9028' : '#525252',
               textDecoration: 'none',
               fontSize: '10px',
               fontWeight: 500,
@@ -62,19 +62,19 @@ export default function BottomNav() {
                   width: 46, height: 30,
                   borderRadius: 15,
                   background: isActive
-                    ? 'linear-gradient(135deg, rgba(0,212,255,0.25), rgba(0,212,255,0.1))'
+                    ? 'linear-gradient(135deg, rgba(255, 144, 40,0.25), rgba(255, 144, 40,0.1))'
                     : 'rgba(255,255,255,0.05)',
-                  border: `1px solid ${isActive ? 'rgba(0,212,255,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                  border: `1px solid ${isActive ? 'rgba(255, 144, 40,0.4)' : 'rgba(255,255,255,0.08)'}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   transition: 'all 0.2s ease',
-                  boxShadow: isActive ? '0 0 12px rgba(0,212,255,0.25)' : 'none',
+                  boxShadow: isActive ? '0 0 12px rgba(255, 144, 40,0.25)' : 'none',
                 }}>
                   <Icon
                     size={18}
                     style={{
-                      filter: isActive ? 'drop-shadow(0 0 4px rgba(0,212,255,0.8))' : 'none',
+                      filter: isActive ? 'drop-shadow(0 0 4px rgba(255, 144, 40,0.8))' : 'none',
                       transition: 'filter 0.15s ease',
                     }}
                   />
@@ -92,7 +92,7 @@ export default function BottomNav() {
                 <Icon
                   size={22}
                   style={{
-                    filter: isActive ? 'drop-shadow(0 0 5px rgba(0,212,255,0.6))' : 'none',
+                    filter: isActive ? 'drop-shadow(0 0 5px rgba(255, 144, 40,0.6))' : 'none',
                     transition: 'filter 0.15s ease',
                   }}
                 />
@@ -108,8 +108,8 @@ export default function BottomNav() {
                 width: 28,
                 height: 2,
                 borderRadius: '0 0 2px 2px',
-                background: '#00d4ff',
-                boxShadow: '0 0 6px rgba(0,212,255,0.6)',
+                background: '#ff9028',
+                boxShadow: '0 0 6px rgba(255, 144, 40,0.6)',
               }} />
             )}
           </NavLink>

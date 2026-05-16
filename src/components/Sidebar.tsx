@@ -38,7 +38,7 @@ export default function Sidebar() {
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className="w-9 h-9 rounded-xl bg-void-300 border border-void-400 flex items-center justify-center">
-              <Zap size={18} className="text-neon-cyan" style={{ filter: 'drop-shadow(0 0 4px rgba(0,212,255,0.6))' }} />
+              <Zap size={18} className="text-neon-cyan" style={{ filter: 'drop-shadow(0 0 4px rgba(255, 144, 40,0.6))' }} />
             </div>
             <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-neon-green"
               style={{ boxShadow: '0 0 6px rgba(0,255,135,0.7)' }} />

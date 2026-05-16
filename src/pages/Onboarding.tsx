@@ -35,7 +35,7 @@ export default function Onboarding() {
   const goalLabels: Record<FitnessGoal, { label: string; desc: string; color: string }> = {
     lose_fat: { label: 'Lose Fat', desc: 'Caloric deficit, preserve muscle', color: '#ff3b5c' },
     maintain: { label: 'Maintain', desc: 'Stay at current weight', color: '#b0b0b0' },
-    build_muscle: { label: 'Build Muscle', desc: 'Lean bulk, moderate surplus', color: '#00d4ff' },
+    build_muscle: { label: 'Build Muscle', desc: 'Lean bulk, moderate surplus', color: '#ff9028' },
     aggressive_bulk: { label: 'Aggressive Bulk', desc: 'Max mass, larger surplus', color: '#a855f7' },
     recomp: { label: 'Body Recomp', desc: 'Cut fat & build muscle simultaneously', color: '#00ff87' },
   }
@@ -63,7 +63,7 @@ export default function Onboarding() {
     <div className="min-h-screen bg-black flex items-center justify-center p-4 grid-bg">
       <div className="absolute inset-0"
         style={{
-          background: 'radial-gradient(ellipse at 20% 20%, rgba(0,212,255,0.04) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(168,85,247,0.04) 0%, transparent 50%)',
+          background: 'radial-gradient(ellipse at 20% 20%, rgba(255, 144, 40,0.04) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(168,85,247,0.04) 0%, transparent 50%)',
         }} />
 
       <div className="relative w-full max-w-lg">
@@ -93,7 +93,7 @@ export default function Onboarding() {
                   transition={{ type: 'spring', delay: 0.1 }}
                   className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-void-300 border border-void-400 flex items-center justify-center"
                 >
-                  <Zap size={36} className="text-neon-cyan" style={{ filter: 'drop-shadow(0 0 8px rgba(0,212,255,0.7))' }} />
+                  <Zap size={36} className="text-neon-cyan" style={{ filter: 'drop-shadow(0 0 8px rgba(255, 144, 40,0.7))' }} />
                 </motion.div>
                 <h1 className="text-3xl font-black text-white mb-2 tracking-tight">VOIDFIT</h1>
                 <p className="text-void-600 mb-1">Elite Fitness Tracking System</p>
@@ -261,7 +261,7 @@ export default function Onboarding() {
                     <div className="text-xs text-void-600 uppercase tracking-widest mb-3">Your Daily Targets</div>
                     <div className="grid grid-cols-3 gap-3 text-center">
                       {[
-                        { label: 'Calories', value: calTarget, color: '#00d4ff', unit: 'kcal' },
+                        { label: 'Calories', value: calTarget, color: '#ff9028', unit: 'kcal' },
                         { label: 'TDEE', value: tdeePreview, color: '#a855f7', unit: 'kcal' },
                         { label: 'Protein', value: Math.round((form.weight ?? 80) * 2.2), color: '#00ff87', unit: 'g' },
                       ].map(({ label, value, color, unit }) => (

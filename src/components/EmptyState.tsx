@@ -26,7 +26,7 @@ export default function EmptyState({ icon, title, subtitle, action }: Props) {
       <div style={{
         fontSize: 56,
         lineHeight: 1,
-        filter: 'drop-shadow(0 0 20px rgba(0,212,255,0.3))',
+        filter: 'drop-shadow(0 0 20px rgba(255, 144, 40,0.3))',
         marginBottom: 8,
       }}>
         {icon}

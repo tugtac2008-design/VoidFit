@@ -17,7 +17,7 @@ export default function MacroRing({
   max,
   size = 160,
   strokeWidth = 12,
-  color = '#00d4ff',
+  color = '#ff9028',
   bgColor = '#1a1a1a',
   label,
   sublabel,

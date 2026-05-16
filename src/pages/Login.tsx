@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Zap, Chrome } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Login() {
@@ -13,7 +12,7 @@ export default function Login() {
     setError('')
     try {
       await signInWithGoogle()
-    } catch (e: unknown) {
+    } catch {
       setError('Sign in failed. Please try again.')
       setLoading(false)
     }
@@ -24,71 +23,121 @@ export default function Login() {
       minHeight: '100dvh',
       background: '#000',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '24px',
+      position: 'relative',
+      overflow: 'hidden',
     }}>
-      {/* Background glow */}
+      {/* Grid background */}
       <div style={{
         position: 'fixed', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 70%)',
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)',
+        backgroundSize: '48px 48px',
+      }} />
+
+      {/* Ambient glow top */}
+      <div style={{
+        position: 'fixed', top: '-20%', left: '50%', transform: 'translateX(-50%)',
+        width: '600px', height: '400px',
+        background: 'radial-gradient(ellipse, rgba(255,144,40,0.14) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Ambient glow bottom */}
+      <div style={{
+        position: 'fixed', bottom: '-10%', left: '50%', transform: 'translateX(-50%)',
+        width: '400px', height: '300px',
+        background: 'radial-gradient(ellipse, rgba(255,107,26,0.06) 0%, transparent 70%)',
+        pointerEvents: 'none',
       }} />
 
       <motion.div
-        initial={{ opacity: 0, y: 32 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        style={{ width: '100%', maxWidth: 400, textAlign: 'center' }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        style={{ width: '100%', maxWidth: 380, textAlign: 'center', position: 'relative', zIndex: 1 }}
       >
-        {/* Logo */}
+        {/* Hero orb */}
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
+          initial={{ scale: 0.7, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.1, duration: 0.4 }}
-          style={{ display: 'flex', justifyContent: 'center', marginBottom: 32 }}
+          transition={{ delay: 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          style={{ display: 'flex', justifyContent: 'center', marginBottom: 40 }}
         >
-          <div style={{
-            width: 72, height: 72, borderRadius: 20,
-            background: 'rgba(0,212,255,0.08)',
-            border: '1px solid rgba(0,212,255,0.2)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 40px rgba(0,212,255,0.15)',
-          }}>
-            <Zap size={36} style={{ color: '#00d4ff', filter: 'drop-shadow(0 0 8px rgba(0,212,255,0.8))' }} />
+          <div style={{ position: 'relative', width: 120, height: 120 }}>
+            {/* Outer ring */}
+            <div style={{
+              position: 'absolute', inset: 0, borderRadius: '50%',
+              border: '1px solid rgba(255,144,40,0.15)',
+              animation: 'orbPulse 3s ease-in-out infinite',
+            }} />
+            {/* Mid ring */}
+            <div style={{
+              position: 'absolute', inset: 12, borderRadius: '50%',
+              border: '1px solid rgba(255,144,40,0.25)',
+            }} />
+            {/* Inner filled orb */}
+            <div style={{
+              position: 'absolute', inset: 24, borderRadius: '50%',
+              background: 'radial-gradient(circle at 35% 35%, rgba(255,178,96,0.9), rgba(255,107,26,0.85))',
+              boxShadow: '0 0 30px rgba(255,144,40,0.6), 0 0 60px rgba(255,144,40,0.25), inset 0 1px 0 rgba(255,255,255,0.2)',
+            }}>
+              {/* Lightning bolt */}
+              <svg viewBox="0 0 24 24" fill="none" style={{ width: '60%', height: '60%', position: 'absolute', top: '20%', left: '20%' }}>
+                <path d="M13 2L4.5 13.5H11L10 22L19.5 10H13L13 2Z" fill="white" fillOpacity="0.95" />
+              </svg>
+            </div>
           </div>
         </motion.div>
 
+        {/* Wordmark */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
+          style={{ marginBottom: 8 }}
         >
-          <h1 style={{
+          <div style={{
             fontFamily: 'Inter, sans-serif',
-            fontSize: 32, fontWeight: 900,
-            letterSpacing: '-0.5px', color: '#fff',
-            margin: '0 0 8px',
+            fontSize: 38, fontWeight: 900,
+            letterSpacing: '-1px', color: '#fff',
+            lineHeight: 1,
           }}>
-            VOID<span style={{ color: '#00d4ff', filter: 'drop-shadow(0 0 8px rgba(0,212,255,0.6))' }}>FIT</span>
-          </h1>
-          <p style={{ color: '#525252', fontSize: 14, margin: '0 0 40px', letterSpacing: '0.3px' }}>
-            Elite fitness tracking for serious athletes
-          </p>
+            VOID<span style={{
+              color: '#ff9028',
+              textShadow: '0 0 20px rgba(255,144,40,0.5), 0 0 40px rgba(255,144,40,0.2)',
+            }}>FIT</span>
+          </div>
         </motion.div>
 
-        {/* Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid #1a1a1a',
-            borderRadius: 16, padding: '32px 24px',
+            color: '#4a4a4a', fontSize: 12, letterSpacing: '2.5px',
+            textTransform: 'uppercase', marginBottom: 44, fontWeight: 500,
           }}
         >
-          <p style={{ color: '#737373', fontSize: 13, marginBottom: 24, lineHeight: 1.6 }}>
-            Sign in to sync your data across all your devices
+          Elite Performance Tracker
+        </motion.p>
+
+        {/* Auth card */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.5 }}
+          style={{
+            background: 'rgba(255,255,255,0.025)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: 20, padding: '28px 24px',
+            backdropFilter: 'blur(12px)',
+          }}
+        >
+          <p style={{ color: '#5a5a5a', fontSize: 13, marginBottom: 24, lineHeight: 1.6 }}>
+            Sign in to sync your training data across all devices
           </p>
 
           <button
@@ -96,22 +145,23 @@ export default function Login() {
             disabled={loading}
             style={{
               width: '100%', padding: '14px 20px',
-              background: loading ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.12)',
+              background: loading ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.07)',
+              border: '1px solid rgba(255,255,255,0.1)',
               borderRadius: 12, color: '#fff',
-              fontSize: 15, fontWeight: 600,
+              fontSize: 14, fontWeight: 600,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
               cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.15s ease',
+              transition: 'all 0.2s ease',
               fontFamily: 'Inter, sans-serif',
+              letterSpacing: '0.2px',
             }}
-            onMouseEnter={e => !loading && ((e.target as HTMLElement).style.background = 'rgba(255,255,255,0.1)')}
-            onMouseLeave={e => !loading && ((e.target as HTMLElement).style.background = 'rgba(255,255,255,0.06)')}
+            onMouseEnter={e => { if (!loading) { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.12)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.16)' } }}
+            onMouseLeave={e => { if (!loading) { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)' } }}
           >
             {loading ? (
               <div style={{
                 width: 18, height: 18, border: '2px solid #333',
-                borderTopColor: '#00d4ff', borderRadius: '50%',
+                borderTopColor: '#ff9028', borderRadius: '50%',
                 animation: 'spin 0.7s linear infinite',
               }} />
             ) : (
@@ -129,13 +179,39 @@ export default function Login() {
             <p style={{ color: '#ff4d4d', fontSize: 13, marginTop: 16 }}>{error}</p>
           )}
 
-          <p style={{ color: '#3a3a3a', fontSize: 11, marginTop: 24, lineHeight: 1.6 }}>
-            Your data is private and stored securely in your account
-          </p>
+          <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+            <p style={{ color: '#2e2e2e', fontSize: 11, letterSpacing: '0.5px' }}>
+              PRIVATE & SECURE
+            </p>
+            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
+          </div>
+        </motion.div>
+
+        {/* Feature tags */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 28, flexWrap: 'wrap' }}
+        >
+          {['Nutrition', 'Workouts', 'Progress', 'Goals'].map(tag => (
+            <span key={tag} style={{
+              fontSize: 10, fontWeight: 600, letterSpacing: '1.2px',
+              textTransform: 'uppercase', color: '#333',
+              padding: '4px 10px', border: '1px solid #1a1a1a', borderRadius: 20,
+            }}>{tag}</span>
+          ))}
         </motion.div>
       </motion.div>
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg) } }
+        @keyframes orbPulse {
+          0%, 100% { transform: scale(1); opacity: 0.5; }
+          50% { transform: scale(1.06); opacity: 1; }
+        }
+      `}</style>
     </div>
   )
 }

@@ -355,7 +355,7 @@ export default function Workout() {
                 </div>
                 <div className="grid grid-cols-4 gap-3 mt-3">
                   {[
-                    { label: 'Duration', val: formatDuration(w.duration ?? 0), color: '#00d4ff' },
+                    { label: 'Duration', val: formatDuration(w.duration ?? 0), color: '#ff9028' },
                     { label: 'Exercises', val: w.exercises.length, color: '#a855f7' },
                     { label: 'Sets', val: w.totalSets, color: '#00ff87' },
                     { label: 'Volume', val: `${Math.round(w.totalVolume)}kg`, color: '#ff8c42' },

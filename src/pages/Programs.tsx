@@ -15,12 +15,12 @@ const card = {
 
 const DIFFICULTY_COLOR: Record<string, string> = {
   beginner: '#00ff87',
-  intermediate: '#00d4ff',
+  intermediate: '#ff9028',
   advanced: '#a855f7',
 }
 
 const CATEGORY_COLOR: Record<string, string> = {
-  strength: '#00d4ff',
+  strength: '#ff9028',
   hypertrophy: '#a855f7',
   powerlifting: '#ff3b5c',
   cardio: '#ff8c42',
@@ -185,7 +185,7 @@ function ProgramCard({ program, isUserProgram, isActive, onStart, onDelete, onDe
         <div style={{ marginBottom: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
             <span style={{ fontSize: 11, color: '#6b6b6b' }}>Progress</span>
-            <span style={{ fontSize: 11, color: '#00d4ff', fontFamily: 'JetBrains Mono, monospace' }}>
+            <span style={{ fontSize: 11, color: '#ff9028', fontFamily: 'JetBrains Mono, monospace' }}>
               Week {(program as Program).completedWeeks} / {program.durationWeeks}
             </span>
           </div>
@@ -317,14 +317,14 @@ export default function Programs() {
         <motion.div custom={1} variants={card}>
           <div className="text-overline" style={{ marginBottom: 12 }}>Currently Active</div>
           <div className="glass-card" style={{
-            borderColor: 'rgba(0,212,255,0.25)',
-            background: 'rgba(0,212,255,0.03)',
+            borderColor: 'rgba(255, 144, 40,0.25)',
+            background: 'rgba(255, 144, 40,0.03)',
           }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                   <span className="pulse-dot pulse-dot-cyan" />
-                  <span style={{ fontSize: 13, color: '#00d4ff', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+                  <span style={{ fontSize: 13, color: '#ff9028', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
                     Active Program
                   </span>
                 </div>
@@ -358,7 +358,7 @@ export default function Programs() {
               <div style={{ marginBottom: 20 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                   <span style={{ fontSize: 12, color: '#6b6b6b' }}>Program Progress</span>
-                  <span style={{ fontSize: 13, color: '#00d4ff', fontFamily: 'JetBrains Mono, monospace', fontWeight: 600 }}>
+                  <span style={{ fontSize: 13, color: '#ff9028', fontFamily: 'JetBrains Mono, monospace', fontWeight: 600 }}>
                     Week {activeProgram.completedWeeks} / {activeProgram.durationWeeks}
                   </span>
                 </div>
@@ -415,7 +415,7 @@ export default function Programs() {
       {/* Browse Built-in Programs */}
       <motion.div custom={3} variants={card}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-          <BookOpen size={15} style={{ color: '#00d4ff' }} />
+          <BookOpen size={15} style={{ color: '#ff9028' }} />
           <span className="text-overline">Program Library</span>
           <span className="badge badge-cyan">{BUILTIN_PROGRAMS.length}</span>
         </div>

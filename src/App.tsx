@@ -45,7 +45,7 @@ export default function App() {
       }}>
         <div style={{
           width: 32, height: 32, border: '2px solid #1a1a1a',
-          borderTopColor: '#00d4ff', borderRadius: '50%',
+          borderTopColor: '#ff9028', borderRadius: '50%',
           animation: 'spin 0.7s linear infinite',
         }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>

@@ -17,10 +17,10 @@ export default {
           500: '#333333',
           600: '#444444',
         },
-        'neon-cyan': '#00d4ff',
+        'neon-cyan': '#ff9028',
         'neon-purple': '#a855f7',
         'neon-green': '#00ff87',
-        'neon-orange': '#ff8c42',
+        'neon-orange': '#ff6b1a',
         'neon-red': '#ff3b5c',
         'neon-yellow': '#ffd700',
       },
@@ -29,8 +29,8 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'glow-cyan': '0 0 15px rgba(0, 212, 255, 0.4), 0 0 40px rgba(0, 212, 255, 0.1)',
-        'glow-cyan-sm': '0 0 8px rgba(0, 212, 255, 0.5)',
+        'glow-cyan': '0 0 15px rgba(255, 144, 40, 0.4), 0 0 40px rgba(255, 144, 40, 0.1)',
+        'glow-cyan-sm': '0 0 8px rgba(255, 144, 40, 0.5)',
         'glow-purple': '0 0 15px rgba(168, 85, 247, 0.4), 0 0 40px rgba(168, 85, 247, 0.1)',
         'glow-green': '0 0 15px rgba(0, 255, 135, 0.4), 0 0 40px rgba(0, 255, 135, 0.1)',
         'glow-red': '0 0 15px rgba(255, 59, 92, 0.4)',
@@ -53,8 +53,8 @@ export default {
       },
       keyframes: {
         glowPulse: {
-          '0%': { boxShadow: '0 0 5px rgba(0, 212, 255, 0.3)' },
-          '100%': { boxShadow: '0 0 20px rgba(0, 212, 255, 0.7), 0 0 40px rgba(0, 212, 255, 0.3)' },
+          '0%': { boxShadow: '0 0 5px rgba(255, 144, 40, 0.3)' },
+          '100%': { boxShadow: '0 0 20px rgba(255, 144, 40, 0.7), 0 0 40px rgba(255, 144, 40, 0.3)' },
         },
         fadeInUp: {
           from: { opacity: '0', transform: 'translateY(16px)' },

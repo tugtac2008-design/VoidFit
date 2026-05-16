@@ -59,7 +59,7 @@ export default function RestTimer({ defaultSeconds = 90, onClose }: Props) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 20, scale: 0.95 }}
       className="fixed bottom-6 right-6 z-50 card p-5 w-64"
-      style={{ borderColor: isDone ? 'rgba(0,255,135,0.4)' : 'rgba(0,212,255,0.2)' }}
+      style={{ borderColor: isDone ? 'rgba(0,255,135,0.4)' : 'rgba(255, 144, 40,0.2)' }}
     >
       <div className="flex items-center justify-between mb-4">
         <span className="text-xs font-semibold text-void-600 uppercase tracking-widest">Rest Timer</span>
@@ -76,13 +76,13 @@ export default function RestTimer({ defaultSeconds = 90, onClose }: Props) {
             <motion.circle
               cx="60" cy="60" r="54"
               fill="none"
-              stroke={isDone ? '#00ff87' : '#00d4ff'}
+              stroke={isDone ? '#00ff87' : '#ff9028'}
               strokeWidth="6"
               strokeLinecap="round"
               strokeDasharray={circumference}
               animate={{ strokeDashoffset: circumference - offset }}
               transition={{ duration: 0.5 }}
-              style={{ filter: `drop-shadow(0 0 4px ${isDone ? '#00ff8780' : '#00d4ff80'})` }}
+              style={{ filter: `drop-shadow(0 0 4px ${isDone ? '#00ff8780' : '#ff902880'})` }}
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">

@@ -97,7 +97,7 @@ export default function Dashboard() {
           <div>
             <h1 style={{ fontSize: isMobile ? 24 : 32, fontWeight: 900, color: '#fff', lineHeight: 1.15, letterSpacing: '-0.5px', margin: 0 }}>
               {greetingTime()},{' '}
-              <span style={{ color: '#00d4ff', textShadow: '0 0 20px rgba(0,212,255,0.4)' }}>
+              <span style={{ color: '#ff9028', textShadow: '0 0 20px rgba(255, 144, 40,0.4)' }}>
                 {user.name}
               </span>
             </h1>
@@ -127,7 +127,7 @@ export default function Dashboard() {
         <motion.div custom={1} variants={card}>
           <div className="glass-card" style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 11, color: '#6b6b6b', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 8 }}>Calories</div>
-            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 28, fontWeight: 900, color: '#00d4ff', lineHeight: 1, marginBottom: 6 }}>
+            <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 28, fontWeight: 900, color: '#ff9028', lineHeight: 1, marginBottom: 6 }}>
               <AnimatedNumber value={Math.round(totals.calories)} />
             </div>
             <div style={{ fontSize: 11, color: '#525252', marginBottom: 10 }}>/ {macroGoals.calories} kcal</div>
@@ -180,7 +180,7 @@ export default function Dashboard() {
             <div style={{ fontSize: 11, color: '#525252' }}>day streak</div>
             {streak === 0 && (
               <Link to="/workout" style={{ textDecoration: 'none' }}>
-                <div style={{ fontSize: 11, color: '#00d4ff', marginTop: 6 }}>Start today →</div>
+                <div style={{ fontSize: 11, color: '#ff9028', marginTop: 6 }}>Start today →</div>
               </Link>
             )}
           </div>
@@ -237,7 +237,7 @@ export default function Dashboard() {
               max={macroGoals.calories}
               size={140}
               strokeWidth={10}
-              color="#00d4ff"
+              color="#ff9028"
               label={`${Math.round(totals.calories)}`}
               sublabel="kcal"
             />
@@ -246,7 +246,7 @@ export default function Dashboard() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {[
                 { label: 'Protein', val: totals.protein, goal: macroGoals.protein, color: '#00ff87', unit: 'g' },
-                { label: 'Carbs', val: totals.carbs, goal: macroGoals.carbs, color: '#00d4ff', unit: 'g' },
+                { label: 'Carbs', val: totals.carbs, goal: macroGoals.carbs, color: '#ff9028', unit: 'g' },
                 { label: 'Fat', val: totals.fat, goal: macroGoals.fat, color: '#a855f7', unit: 'g' },
               ].map(({ label, val, goal, color, unit }) => (
                 <div key={label}>
@@ -303,7 +303,7 @@ export default function Dashboard() {
         <div className={`glass-card ${activeWorkout ? 'card-cyan' : ''}`}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Dumbbell size={16} style={{ color: '#00d4ff' }} />
+              <Dumbbell size={16} style={{ color: '#ff9028' }} />
               <span style={{ fontSize: 11, color: '#6b6b6b', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
                 {activeWorkout ? 'Active Workout' : "Today's Workout"}
               </span>
@@ -565,11 +565,11 @@ export default function Dashboard() {
 
       {/* Quote */}
       <motion.div custom={12} variants={card}>
-        <div className="glass-card" style={{ borderColor: 'rgba(0,212,255,0.1)', background: 'rgba(0,212,255,0.02)' }}>
+        <div className="glass-card" style={{ borderColor: 'rgba(255, 144, 40,0.1)', background: 'rgba(255, 144, 40,0.02)' }}>
           <div style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', top: -8, left: -4, fontSize: 48, color: 'rgba(0,212,255,0.08)', fontWeight: 900, lineHeight: 1 }}>"</div>
+            <div style={{ position: 'absolute', top: -8, left: -4, fontSize: 48, color: 'rgba(255, 144, 40,0.08)', fontWeight: 900, lineHeight: 1 }}>"</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <Zap size={15} style={{ color: '#00d4ff', flexShrink: 0 }} />
+              <Zap size={15} style={{ color: '#ff9028', flexShrink: 0 }} />
               <p style={{ fontSize: 13, color: '#6b6b6b', fontStyle: 'italic', margin: 0, lineHeight: 1.6 }}>{quote}</p>
             </div>
           </div>

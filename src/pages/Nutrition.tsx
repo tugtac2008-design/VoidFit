@@ -145,14 +145,14 @@ export default function Nutrition() {
             max={goals.calories}
             size={96}
             strokeWidth={8}
-            color="#00d4ff"
+            color="#ff9028"
             label={`${Math.round(totals.calories)}`}
             sublabel="kcal"
           />
           <div className="flex-1 grid grid-cols-3 gap-3">
             {[
               { label: 'Protein', val: totals.protein, goal: goals.protein, color: '#00ff87', unit: 'g' },
-              { label: 'Carbs', val: totals.carbs, goal: goals.carbs, color: '#00d4ff', unit: 'g' },
+              { label: 'Carbs', val: totals.carbs, goal: goals.carbs, color: '#ff9028', unit: 'g' },
               { label: 'Fat', val: totals.fat, goal: goals.fat, color: '#a855f7', unit: 'g' },
             ].map(({ label, val, goal, color, unit }) => (
               <div key={label} className="text-center">
@@ -387,9 +387,9 @@ export default function Nutrition() {
                   </div>
                   <div className="grid grid-cols-4 gap-3 text-center">
                     {[
-                      { label: 'Calories', val: selectedFood.calories, color: '#00d4ff' },
+                      { label: 'Calories', val: selectedFood.calories, color: '#ff9028' },
                       { label: 'Protein', val: `${selectedFood.protein}g`, color: '#00ff87' },
-                      { label: 'Carbs', val: `${selectedFood.carbs}g`, color: '#00d4ff' },
+                      { label: 'Carbs', val: `${selectedFood.carbs}g`, color: '#ff9028' },
                       { label: 'Fat', val: `${selectedFood.fat}g`, color: '#a855f7' },
                     ].map(({ label, val, color }) => (
                       <div key={label}>
@@ -486,9 +486,9 @@ export default function Nutrition() {
           <div className="text-xs text-void-600 uppercase tracking-widest mb-2">Macros per serving</div>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { key: 'calories', label: 'Calories', unit: 'kcal', color: '#00d4ff' },
+              { key: 'calories', label: 'Calories', unit: 'kcal', color: '#ff9028' },
               { key: 'protein', label: 'Protein', unit: 'g', color: '#00ff87' },
-              { key: 'carbs', label: 'Carbohydrates', unit: 'g', color: '#00d4ff' },
+              { key: 'carbs', label: 'Carbohydrates', unit: 'g', color: '#ff9028' },
               { key: 'fat', label: 'Fat', unit: 'g', color: '#a855f7' },
               { key: 'fiber', label: 'Fiber', unit: 'g', color: '#00ff87' },
               { key: 'sodium', label: 'Sodium', unit: 'mg', color: '#ff8c42' },

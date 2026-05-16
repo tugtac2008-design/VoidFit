@@ -160,7 +160,7 @@ export default function Progress() {
       <div className="grid grid-cols-4 gap-3">
         {[
           { label: 'Current Weight', val: latest?.weight ? `${latest.weight}kg` : '—', color: '#ff8c42', icon: Scale },
-          { label: 'Body Fat', val: latest?.bodyFat ? `${latest.bodyFat}%` : '—', color: '#00d4ff', icon: Activity },
+          { label: 'Body Fat', val: latest?.bodyFat ? `${latest.bodyFat}%` : '—', color: '#ff9028', icon: Activity },
           { label: 'Workout Streak', val: streak > 0 ? `${streak}d 🔥` : '0d', color: '#00ff87', icon: Target },
           { label: 'Total Workouts', val: workouts.length, color: '#a855f7', icon: BarChart2 },
         ].map(({ label, val, color, icon: Icon }, i) => (
@@ -248,9 +248,9 @@ export default function Progress() {
                   <XAxis dataKey="date" stroke="#333" tick={{ fill: '#6b6b6b', fontSize: 10 }} />
                   <YAxis stroke="#333" tick={{ fill: '#6b6b6b', fontSize: 10 }} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Line type="monotone" dataKey="bodyFat" name="bodyFat" stroke="#00d4ff" strokeWidth={2}
-                    dot={{ fill: '#00d4ff', strokeWidth: 0, r: 3 }}
-                    style={{ filter: 'drop-shadow(0 0 4px rgba(0,212,255,0.4))' }} />
+                  <Line type="monotone" dataKey="bodyFat" name="bodyFat" stroke="#ff9028" strokeWidth={2}
+                    dot={{ fill: '#ff9028', strokeWidth: 0, r: 3 }}
+                    style={{ filter: 'drop-shadow(0 0 4px rgba(255, 144, 40,0.4))' }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -304,7 +304,7 @@ export default function Progress() {
                 ['Chest', 'chest', '#ff3b5c'],
                 ['Waist', 'waist', '#ff8c42'],
                 ['Hips', 'hips', '#a855f7'],
-                ['Shoulders', 'shoulders', '#00d4ff'],
+                ['Shoulders', 'shoulders', '#ff9028'],
                 ['Left Arm', 'leftArm', '#00ff87'],
                 ['Right Arm', 'rightArm', '#00ff87'],
                 ['Left Thigh', 'leftThigh', '#ffd700'],
@@ -382,9 +382,9 @@ export default function Progress() {
                   <XAxis dataKey="date" stroke="#333" tick={{ fill: '#6b6b6b', fontSize: 10 }} />
                   <YAxis stroke="#333" tick={{ fill: '#6b6b6b', fontSize: 10 }} />
                   <Tooltip content={<CustomTooltip />} />
-                  <Line type="monotone" dataKey="weight" name="weight" stroke="#00d4ff" strokeWidth={2}
-                    dot={{ fill: '#00d4ff', strokeWidth: 0, r: 3 }}
-                    style={{ filter: 'drop-shadow(0 0 4px rgba(0,212,255,0.5))' }} />
+                  <Line type="monotone" dataKey="weight" name="weight" stroke="#ff9028" strokeWidth={2}
+                    dot={{ fill: '#ff9028', strokeWidth: 0, r: 3 }}
+                    style={{ filter: 'drop-shadow(0 0 4px rgba(255, 144, 40,0.5))' }} />
                   <Line type="monotone" dataKey="e1rm" name="e1RM" stroke="#a855f780" strokeWidth={1.5}
                     dot={false} strokeDasharray="4 4" />
                 </LineChart>
@@ -455,16 +455,16 @@ export default function Progress() {
                 <AreaChart data={calorieData}>
                   <defs>
                     <linearGradient id="calGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#00d4ff" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="#00d4ff" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#ff9028" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="#ff9028" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1a1a1a" />
                   <XAxis dataKey="date" stroke="#333" tick={{ fill: '#6b6b6b', fontSize: 10 }} />
                   <YAxis stroke="#333" tick={{ fill: '#6b6b6b', fontSize: 10 }} />
                   <Tooltip content={<CustomTooltip />} />
-                  <ReferenceLine y={user.macroGoals.calories} stroke="#00d4ff40" strokeDasharray="6 3" />
-                  <Area type="monotone" dataKey="calories" name="calories" stroke="#00d4ff"
+                  <ReferenceLine y={user.macroGoals.calories} stroke="#ff902840" strokeDasharray="6 3" />
+                  <Area type="monotone" dataKey="calories" name="calories" stroke="#ff9028"
                     strokeWidth={2} fill="url(#calGrad)" dot={false} />
                 </AreaChart>
               </ResponsiveContainer>
@@ -486,7 +486,7 @@ export default function Progress() {
           <div className="grid grid-cols-2 gap-3">
             {[
               { key: 'weight', label: 'Weight', unit: 'kg', color: '#ff8c42' },
-              { key: 'bodyFat', label: 'Body Fat', unit: '%', color: '#00d4ff' },
+              { key: 'bodyFat', label: 'Body Fat', unit: '%', color: '#ff9028' },
             ].map(({ key, label, unit, color }) => (
               <div key={key}>
                 <label className="block text-xs mb-1" style={{ color }}>{label} ({unit})</label>
@@ -503,7 +503,7 @@ export default function Progress() {
               { key: 'chest', label: 'Chest', color: '#ff3b5c' },
               { key: 'waist', label: 'Waist', color: '#ff8c42' },
               { key: 'hips', label: 'Hips', color: '#a855f7' },
-              { key: 'shoulders', label: 'Shoulders', color: '#00d4ff' },
+              { key: 'shoulders', label: 'Shoulders', color: '#ff9028' },
               { key: 'leftArm', label: 'Left Arm', color: '#00ff87' },
               { key: 'rightArm', label: 'Right Arm', color: '#00ff87' },
               { key: 'leftThigh', label: 'Left Thigh', color: '#ffd700' },

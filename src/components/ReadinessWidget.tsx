@@ -48,7 +48,7 @@ interface SliderRowProps {
   reversed?: boolean
 }
 
-function SliderRow({ label, emoji, value, min, max, onChange, color = '#00d4ff', reversed }: SliderRowProps) {
+function SliderRow({ label, emoji, value, min, max, onChange, color = '#ff9028', reversed }: SliderRowProps) {
   const displayVal = reversed ? `${value}/10 (${value <= 3 ? 'Low' : value <= 6 ? 'Med' : 'High'})` : label === 'Sleep' ? `${value}h` : `${value}/10`
   return (
     <div style={{ marginBottom: 12 }}>

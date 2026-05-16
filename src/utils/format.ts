@@ -72,7 +72,7 @@ export function greetingTime(): string {
 export function muscleColor(muscle: string): string {
   const map: Record<string, string> = {
     Chest: '#ff3b5c',
-    Back: '#00d4ff',
+    Back: '#ff9028',
     Shoulders: '#a855f7',
     Biceps: '#00ff87',
     Triceps: '#ffd700',
@@ -90,7 +90,7 @@ export function muscleColor(muscle: string): string {
 export function mealColor(mealType: string): string {
   const map: Record<string, string> = {
     breakfast: '#ffd700',
-    lunch: '#00d4ff',
+    lunch: '#ff9028',
     dinner: '#a855f7',
     snack: '#ff8c42',
     'pre-workout': '#00ff87',
