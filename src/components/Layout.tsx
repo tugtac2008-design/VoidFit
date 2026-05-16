@@ -6,26 +6,25 @@ interface Props { children: ReactNode }
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="flex min-h-screen" style={{ background: '#080A10' }}>
+    <div style={{ background: '#080A10', minHeight: '100dvh' }}>
       {/* Sidebar — desktop only */}
       <div className="hidden lg:block">
         <Sidebar />
       </div>
 
-      {/* Main content */}
+      {/* Main content — scrolls naturally with page */}
       <main
-        className="flex-1 px-3 py-4 lg:px-6 lg:py-6"
-        style={{ marginLeft: 0, paddingBottom: 'calc(110px + env(safe-area-inset-bottom))', WebkitOverflowScrolling: 'touch', touchAction: 'pan-y' }}
+        className="px-3 py-4 lg:px-6 lg:py-6 lg:ml-[220px]"
+        style={{
+          paddingBottom: 'calc(110px + env(safe-area-inset-bottom))',
+          maxWidth: 1280,
+          margin: '0 auto',
+        }}
       >
-        {/* On desktop, offset for sidebar */}
-        <div className="lg:ml-[220px]">
-          <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-            {children}
-          </div>
-        </div>
+        {children}
       </main>
 
-      {/* Bottom nav — mobile/tablet only */}
+      {/* Bottom nav — mobile/tablet only, fixed position */}
       <div className="lg:hidden">
         <BottomNav />
       </div>
