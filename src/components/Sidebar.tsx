@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   LayoutDashboard, Utensils, Dumbbell, TrendingUp, User,
-  Zap, Activity, LogOut
+  Zap, Activity, LogOut, Target, BookOpen
 } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import { useAuth } from '../contexts/AuthContext'
@@ -13,6 +13,8 @@ const NAV = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/nutrition', icon: Utensils, label: 'Nutrition' },
   { to: '/workout', icon: Dumbbell, label: 'Workout' },
+  { to: '/goals', icon: Target, label: 'Goals' },
+  { to: '/programs', icon: BookOpen, label: 'Programs' },
   { to: '/progress', icon: TrendingUp, label: 'Progress' },
   { to: '/profile', icon: User, label: 'Profile' },
 ]

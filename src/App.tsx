@@ -7,6 +7,8 @@ import Nutrition from './pages/Nutrition'
 import Workout from './pages/Workout'
 import Progress from './pages/Progress'
 import Profile from './pages/Profile'
+import Goals from './pages/Goals'
+import Programs from './pages/Programs'
 import Onboarding from './pages/Onboarding'
 import Login from './pages/Login'
 import { useStore } from './store/useStore'
@@ -77,6 +79,8 @@ export default function App() {
             <Route path="/workout" element={<Workout />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/goals" element={<Goals />} />
+            <Route path="/programs" element={<Programs />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>
