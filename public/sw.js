@@ -1,4 +1,4 @@
-const CACHE = 'voidfit-v3'
+const CACHE = 'voidfit-v4'
 const SHELL = [
   '/VoidFit/',
   '/VoidFit/index.html',
@@ -8,17 +8,17 @@ const SHELL = [
 ]
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)))
-  self.skipWaiting()
+  e.waitUntil(
+    caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())
+  )
 })
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   )
-  self.clients.claim()
 })
 
 self.addEventListener('fetch', e => {
@@ -26,41 +26,41 @@ self.addEventListener('fetch', e => {
 
   const url = new URL(e.request.url)
 
-  // Skip Firebase, Google Auth, and cross-origin requests
-  if (
-    url.hostname.includes('firestore') ||
-    url.hostname.includes('firebase') ||
-    url.hostname.includes('googleapis') ||
-    url.hostname.includes('gstatic') ||
-    url.hostname.includes('fonts.') ||
-    url.origin !== self.location.origin
-  ) return
+  // Skip cross-origin requests (Firebase, Google fonts, etc.)
+  if (url.origin !== self.location.origin) return
 
   e.respondWith(
-    caches.open(CACHE).then(cache =>
-      cache.match(e.request).then(cached => {
-        // Assets (hashed bundles): cache-first — they never change
-        if (url.pathname.includes('/assets/')) {
-          if (cached) return cached
-          return fetch(e.request).then(res => {
-            if (res.ok) cache.put(e.request, res.clone())
-            return res
-          })
-        }
+    caches.open(CACHE).then(async cache => {
+      const cached = await cache.match(e.request)
 
-        // App shell: stale-while-revalidate
-        const networkFetch = fetch(e.request).then(res => {
-          if (res.ok) cache.put(e.request, res.clone())
-          return res
-        }).catch(() => cached || caches.match('/VoidFit/index.html'))
+      // Hashed asset bundles: cache-first (filenames never reuse same hash)
+      if (url.pathname.includes('/VoidFit/assets/')) {
+        if (cached) return cached
+        const res = await fetch(e.request)
+        if (res.ok) cache.put(e.request, res.clone())
+        return res
+      }
 
-        return cached ? (networkFetch, cached) : networkFetch
-      })
-    )
+      // App shell: stale-while-revalidate
+      const networkPromise = fetch(e.request)
+        .then(res => { if (res.ok) cache.put(e.request, res.clone()); return res })
+        .catch(() => null)
+
+      // Return cached immediately, update in background
+      if (cached) {
+        networkPromise.catch(() => {})
+        return cached
+      }
+
+      // No cache: wait for network, fallback to index.html for navigation
+      const res = await networkPromise
+      if (res) return res
+      const fallback = await caches.match('/VoidFit/index.html')
+      return fallback || new Response('Offline', { status: 503 })
+    })
   )
 })
 
-// Background sync: when network is back, update the shell
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') self.skipWaiting()
 })
