@@ -2,14 +2,13 @@
   "name": "VoidFit",
   "short_name": "VoidFit",
   "description": "Elite fitness tracking for serious athletes",
-  "id": "/VoidFit/",
   "start_url": "/VoidFit/",
   "scope": "/VoidFit/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait-primary",
   "background_color": "#060608",
   "theme_color": "#060608",
+  "lang": "en",
   "icons": [
     {
       "src": "/VoidFit/icon-192.png",
@@ -21,7 +20,13 @@
       "src": "/VoidFit/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/VoidFit/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
@@ -44,6 +49,5 @@
       "icons": [{ "src": "/VoidFit/icon-192.png", "sizes": "192x192" }]
     }
   ],
-  "categories": ["health", "fitness", "sports"],
-  "screenshots": []
+  "categories": ["health", "fitness", "sports"]
 }
