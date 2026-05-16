@@ -6,7 +6,7 @@ interface Props { children: ReactNode }
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="flex min-h-screen bg-black">
+    <div className="flex min-h-screen" style={{ background: '#080A10' }}>
       {/* Sidebar — desktop only */}
       <div className="hidden lg:block">
         <Sidebar />
@@ -15,7 +15,7 @@ export default function Layout({ children }: Props) {
       {/* Main content */}
       <main
         className="flex-1 px-3 py-4 lg:px-6 lg:py-6"
-        style={{ marginLeft: 0, paddingBottom: 'calc(140px + env(safe-area-inset-bottom))' }}
+        style={{ marginLeft: 0, paddingBottom: 'calc(110px + env(safe-area-inset-bottom))' }}
       >
         {/* On desktop, offset for sidebar */}
         <div className="lg:ml-[220px]">
